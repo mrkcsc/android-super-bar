@@ -1,17 +1,13 @@
 package com.miguelgaeta.super_bar;
 
-import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.AttributeSet;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.AccelerateDecelerateInterpolator;
 
 /**
  * A value bar with style.
@@ -89,10 +85,10 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
 
     private final SuperBarAttributes attrs = new SuperBarAttributes(this);
 
-    private final Config config = new Config(this);
+    private final SuperBarConfig config = new SuperBarConfig(this);
 
     @SuppressWarnings("unused")
-    public Config getConfig() {
+    public SuperBarConfig getConfig() {
 
         return config;
     }
@@ -153,9 +149,9 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        final float shadowRadius = config.controlShadowSize / 2f;
+        final float shadowRadius = config.getControlShadowSize() / 2f;
 
-        final float halfMargin = config.barMargin / 2f;
+        final float halfMargin = config.getBarMargin() / 2f;
 
         final float controlRadius = (getHeight() / 2f);
 
@@ -164,13 +160,13 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
 
         drawBackgroundBar(canvas, barTop, barBot, controlRadius);
 
-        drawBar(canvas, barTop, barBot, controlRadius, config.barValue);
+        drawBar(canvas, barTop, barBot, controlRadius, config.getBarValue());
 
         final float controlX = mBar.right;
 
-        drawOverlayBar(canvas, barTop, barBot, controlRadius, config.overlayBarValue);
+        drawOverlayBar(canvas, barTop, barBot, controlRadius, config.getOverlayBarValue());
 
-        paint.setColor(config.controlColor, shadowRadius, config.controlShadowColor);
+        paint.setColor(config.getControlColor(), shadowRadius, config.getControlShadowColor());
 
         // Dragging control.
         canvas.drawCircle(controlX, (getHeight() / 2f), controlRadius - shadowRadius, paint);
@@ -178,11 +174,11 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
 
     private void drawBar(Canvas canvas, float barTop, float barBot, float controlRadius, float barValue) {
 
-        float length = ((getWidth() - (controlRadius * 2)) / (config.maxBarValue - config.minBarValue)) * (barValue - config.minBarValue);
+        float length = ((getWidth() - (controlRadius * 2)) / (config.getMaxBarValue() - config.getMinBarValue())) * (barValue - config.getMinBarValue());
 
         mBar.set(controlRadius, barTop, length + controlRadius, barBot);
 
-        paint.setColor(config.color.getColor(config.barValue, config.maxBarValue, config.minBarValue));
+        paint.setColor(config.getColor().getColor(config.getBarValue(), config.getMaxBarValue(), config.getMinBarValue()));
 
         canvas.drawRoundRect(mBar, mBar.height() / 2f, mBar.height() / 2f, paint);
     }
@@ -191,18 +187,18 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
 
         mBar.set(controlRadius, barTop, getWidth() - controlRadius, barBot);
 
-        paint.setColor(config.backgroundColor);
+        paint.setColor(config.getBackgroundColor());
 
         canvas.drawRoundRect(mBar, mBar.height() / 2f, mBar.height() / 2f, paint);
     }
 
     private void drawOverlayBar(Canvas canvas, float barTop, float barBot, float controlRadius, float barValue) {
 
-        float length = ((getWidth() - (controlRadius * 2)) / (config.maxBarValue - config.minBarValue)) * (barValue - config.minBarValue);
+        float length = ((getWidth() - (controlRadius * 2)) / (config.getMaxBarValue() - config.getMinBarValue())) * (barValue - config.getMinBarValue());
 
         mBar.set(length + controlRadius, barTop, getWidth() - controlRadius, barBot);
 
-        paint.setColor(config.overlayBarColor.getColor(config.overlayBarValue, config.maxBarValue, config.minBarValue));
+        paint.setColor(config.getOverlayBarColor().getColor(config.getOverlayBarValue(), config.getMaxBarValue(), config.getMinBarValue()));
 
         canvas.drawRoundRect(mBar, mBar.height() / 2f, mBar.height() / 2f, paint);
     }
@@ -216,13 +212,13 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
     @Override
     public boolean onTouchEvent(MotionEvent motionEvent) {
 
-        if (!config.touchEnabled) {
+        if (!config.isTouchEnabled()) {
 
             return super.onTouchEvent(motionEvent);
         }
 
-        if (config.gestureDetector != null &&
-            config.gestureDetector.onTouchEvent(motionEvent)) {
+        if (config.getGestureDetector() != null &&
+            config.getGestureDetector().onTouchEvent(motionEvent)) {
 
             return true;
         }
@@ -238,8 +234,8 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
                 updateValue(x);
                 invalidate();
 
-                if (config.onSelectionMoved != null) {
-                    config.onSelectionMoved.onSelectionMoved(config.barValue, config.maxBarValue, config.minBarValue, this);
+                if (config.getOnSelectionMoved() != null) {
+                    config.getOnSelectionMoved().onSelectionMoved(config.getBarValue(), config.getMaxBarValue(), config.getMinBarValue(), this);
                 }
 
                 break;
@@ -247,8 +243,8 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
                 updateValue(x);
                 invalidate();
 
-                if (config.onSelectionChanged != null) {
-                    config.onSelectionChanged.onSelectionChanged(config.barValue, config.maxBarValue, config.minBarValue, this);
+                if (config.getOnSelectionChanged() != null) {
+                    config.getOnSelectionChanged().onSelectionChanged(config.getBarValue(), config.getMaxBarValue(), config.getMinBarValue(), this);
                 }
 
                 break;
@@ -265,29 +261,29 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
         float newVal;
 
         if (x <= 0)
-            newVal = config.minBarValue;
+            newVal = config.getMinBarValue();
         else if (x > getWidth())
-            newVal = config.maxBarValue;
+            newVal = config.getMaxBarValue();
         else {
             float factor = x / getWidth();
 
-            newVal = (config.maxBarValue - config.minBarValue) * factor + config.minBarValue;
+            newVal = (config.getMaxBarValue() - config.getMinBarValue()) * factor + config.getMinBarValue();
         }
 
-        if (config.barInterval > 0f) {
+        if (config.getBarInterval() > 0f) {
 
-            float remainder = newVal % config.barInterval;
+            float remainder = newVal % config.getBarInterval();
 
             // check if the new value is closer to the next, or the previous
-            if (remainder <= config.barInterval / 2f) {
+            if (remainder <= config.getBarInterval() / 2f) {
 
                 newVal = newVal - remainder;
             } else {
-                newVal = newVal - remainder + config.barInterval;
+                newVal = newVal - remainder + config.getBarInterval();
             }
         }
 
-        config.barValue = newVal;
+        config.setBarValue(null, newVal);
     }
 
     private static class Painter extends Paint {
@@ -340,362 +336,6 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
             }
 
             super.setColor(color);
-        }
-    }
-
-    public static class Config {
-
-        private final SuperBar superBar;
-
-        private Config(SuperBar superBar) {
-
-            this.superBar = superBar;
-        }
-
-        private OnSelectionChanged onSelectionChanged;
-        private OnSelectionMoved onSelectionMoved;
-
-        private float barValue = 40f;
-
-        private int barMargin = 12;
-
-        private float minBarValue = 0f;
-        private float maxBarValue = 100f;
-
-        private float barInterval = 1f;
-
-        private int backgroundColor = Color.GREEN;
-
-        private ColorFormatter color = new ColorFormatter.Solid(Color.BLUE);
-
-        private GestureDetector gestureDetector;
-
-        private boolean touchEnabled = true;
-
-        private float overlayBarValue = 80f;
-
-        private ColorFormatter overlayBarColor = new ColorFormatter.Solid(Color.RED);
-
-        private int controlShadowSize = 12;
-        private int controlShadowColor = Color.argb(127, 0, 0, 0);
-        private int controlColor = Color.YELLOW;
-
-        /**
-         * Set margin of the bar.
-         *
-         * @param barMargin Margin of the bar.
-         */
-        @SuppressWarnings("unused")
-        public void setBarMargin(int barMargin) {
-
-            this.barMargin =  barMargin;
-        }
-
-        /**
-         * Get margin of the bar.
-         *
-         * @return Margin of the bar.
-         */
-        @SuppressWarnings("unused")
-        public float getBarMargin() {
-
-            return this.barMargin;
-        }
-
-        /**
-         * Set control shadow size in pixels.
-         *
-         * @param controlShadowSize Control shadow size in pixels.
-         */
-        @SuppressWarnings("unused")
-        public void setControlShadowSize(int controlShadowSize) {
-
-            this.controlShadowSize = controlShadowSize;
-        }
-
-        /**
-         * Set control shadow color.
-         *
-         * @param controlShadowColor Control shadow color.
-         */
-        @SuppressWarnings("unused")
-        public void setControlShadowColor(int controlShadowColor) {
-
-            this.controlShadowColor = controlShadowColor;
-        }
-
-        /**
-         * Set control color.
-         *
-         * @param controlColor Control color.
-         */
-        @SuppressWarnings("unused")
-        public void setControlColor(int controlColor) {
-
-            this.controlColor = controlColor;
-        }
-
-        /**
-         * Set overlay bar value.
-
-         * @param overlayBarValue Target bar value.
-         */
-        @SuppressWarnings("unused")
-        public void setOverlayBarValue(float overlayBarValue) {
-
-            this.overlayBarValue = overlayBarValue;
-
-            superBar.invalidate();
-        }
-
-        /**
-         * Get the current value of the overlay bar.
-         *
-         * @return Current value of the overlay bar.
-         */
-        @SuppressWarnings("unused")
-        public float getOverlayBarValue() {
-
-            return overlayBarValue;
-        }
-
-        /**
-         * Sets a custom color formatter for the overlay bar.
-         *
-         * @param colorFormatter Color formatter.
-         */
-        public void setOverlayBarColor(ColorFormatter colorFormatter) {
-
-            if (colorFormatter == null) {
-
-                return;
-            }
-
-            this.overlayBarColor = colorFormatter;
-        }
-
-        /**
-         * Set a solid color for the overlay bar.
-         *
-         * @param color Color.
-         */
-        @SuppressWarnings("unused")
-        public void setOverlayBarColor(int color) {
-
-            setOverlayBarColor(new ColorFormatter.Solid(color));
-        }
-
-        /**
-         * Set a callback to be fired when the current bar selection
-         * value is changed by the user.
-         *
-         * @param onSelectionChanged Selection changed callback.
-         */
-        @SuppressWarnings("unused")
-        public void setSelectedChanged(OnSelectionChanged onSelectionChanged) {
-
-            this.onSelectionChanged = onSelectionChanged;
-        }
-
-        /***
-         * Set a callback to be fired when the current bar selection
-         * value if moved by the user.
-         *
-         * @param onSelectionMoved Selection moved callback.
-         */
-        @SuppressWarnings("unused")
-        public void setOnSelectionMoved(OnSelectionMoved onSelectionMoved) {
-
-            this.onSelectionMoved = onSelectionMoved;
-        }
-
-        /**
-         * Get the current value of the bar.
-         *
-         * @return Current value of the bar.
-         */
-        @SuppressWarnings("unused")
-        public float getBarValue() {
-
-            return barValue;
-        }
-
-        /**
-         * Set bar value from it's current position to another
-         * value within it's bounds.
-         *
-         * @param durationMillis Duration in milliseconds - if null will not animate.
-         *
-         * @param barValue Target bar value.
-         */
-        @SuppressWarnings("unused")
-        public void setBarValue(Integer durationMillis, float barValue) {
-
-            setBarValue(durationMillis, barValue, this.barValue);
-        }
-
-        /**
-         * Set bar value from any value within it's bounds to another
-         * value within it's bounds.
-         *
-         * @param durationMillis Duration in milliseconds - if null will not animate.
-         *
-         * @param barValue Target bar value.
-         * @param barValueFrom Starting bar value.
-         */
-        public void setBarValue(Integer durationMillis, float barValue, float barValueFrom) {
-
-            if (barValueFrom < minBarValue) {
-                barValueFrom = minBarValue;
-            }
-
-            if (barValueFrom > maxBarValue) {
-                barValueFrom = maxBarValue;
-            }
-
-            if (barValue < minBarValue) {
-                barValue = minBarValue;
-            }
-
-            if (barValue > maxBarValue) {
-                barValue = maxBarValue;
-            }
-
-            if (durationMillis == null) {
-
-                this.barValue = barValue;
-
-                superBar.invalidate();
-
-            } else {
-
-                final ObjectAnimator animator = ObjectAnimator.ofFloat(this, "barValue", barValueFrom, barValue);
-
-                animator.setInterpolator(new AccelerateDecelerateInterpolator());
-                animator.setDuration(durationMillis);
-                animator.addUpdateListener(superBar);
-                animator.start();
-            }
-        }
-
-        /**
-         * Sets the minimum and maximum value the bar can display.
-         *
-         * @param minBarValue Minimum value.
-         * @param maxBarValue Maximum value.
-         */
-        @SuppressWarnings("unused")
-        public void setBarValueBounds(float minBarValue, float maxBarValue) {
-
-            this.maxBarValue = maxBarValue;
-            this.minBarValue = minBarValue;
-        }
-
-        /**
-         * Returns the maximum value the bar can display.
-         *
-         * @return Maximum value.
-         */
-        @SuppressWarnings("unused")
-        public float getMaxBarValue() {
-
-            return maxBarValue;
-        }
-
-        /**
-         * Returns the minimum value the bar can display.
-         *
-         * @return Minimum value.
-         */
-        @SuppressWarnings("unused")
-        public float getMinBarValue() {
-
-            return minBarValue;
-        }
-
-        /**
-         * Sets the interval in which the values can be chosen and displayed
-         * from the bar slider.
-         *
-         * If interval less than 0, there is no interval.
-         *
-         * @param barInterval Bar value interval.
-         */
-        @SuppressWarnings("unused")
-        public void setBarInterval(float barInterval) {
-
-            this.barInterval = barInterval;
-        }
-
-        /**
-         * Returns bar interval.
-         *
-         * @return Bar interval.
-         */
-        @SuppressWarnings("unused")
-        public float getBarInterval() {
-
-            return barInterval;
-        }
-
-        /**
-         * Sets a custom color formatter for the bar.
-         *
-         * @param colorFormatter Color formatter.
-         */
-        public void setColor(ColorFormatter colorFormatter) {
-
-            if (colorFormatter == null) {
-
-                return;
-            }
-
-            this.color = colorFormatter;
-        }
-
-        /**
-         * Set a solid color for the bar.
-         *
-         * @param color Color.
-         */
-        @SuppressWarnings("unused")
-        public void setColor(int color) {
-
-            setColor(new ColorFormatter.Solid(color));
-        }
-
-        /**
-         * Set a gesture detector for consumers that wish
-         * to add custom handling of touch events.
-         *
-         * @param gestureDetector Detector that returns true if event is consumed.
-         */
-        @SuppressWarnings("unused")
-        public void setGestureDetector(GestureDetector gestureDetector) {
-
-            this.gestureDetector = gestureDetector;
-        }
-
-        /**
-         * Set this to true to enable touch gestures on the bar control.
-         *
-         * @param touchEnabled Is touch enabled.
-         */
-        @SuppressWarnings("unused")
-        public void setTouchEnabled(boolean touchEnabled) {
-
-            this.touchEnabled = touchEnabled;
-        }
-
-        /**
-         * Set background color for the bar.
-         *
-         * @param backgroundColor Target background color.
-         */
-        @SuppressWarnings("unused")
-        public void setBackgroundColor(int backgroundColor) {
-
-            this.backgroundColor = backgroundColor;
         }
     }
 }
