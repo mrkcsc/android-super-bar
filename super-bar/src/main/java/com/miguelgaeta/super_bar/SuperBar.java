@@ -37,7 +37,7 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
         int getColor(float value, float maxValue, float minValue);
     }
 
-    public interface SelectionChanged {
+    public interface OnSelectionChanged {
 
         /**
          * Called when the user releases his finger from the ValueBar.
@@ -50,10 +50,10 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
          *
          * @param superBar Associated instance.
          */
-        void onValueChanged(float value, float maxValue, float minValue, SuperBar superBar);
+        void onSelectionChanged(float value, float maxValue, float minValue, SuperBar superBar);
     }
 
-    public interface SelectionMoved {
+    public interface OnSelectionMoved {
 
         /**
          * Called every time the user moves the finger on the ValueBar.
@@ -68,11 +68,9 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
         void onSelectionMoved(float value, float maxValue, float minValue, SuperBar superBar);
     }
 
-    /** minimum value the bar can display */
-    private float mMinVal = 0f;
+    private final Config config = new Config(this);
 
-    /** maximum value the bar can display */
-    private float mMaxVal = 100f;
+
 
     /** the interval in which values can be chosen and displayed */
     private float mInterval = 1f;
@@ -84,8 +82,6 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
     private Paint mBarPaint;
     private Paint mBorderPaint;
     private Paint mOverlayPaint;
-
-    private ObjectAnimator mAnimator;
 
     private boolean mDrawBorder = false;
     private boolean mDrawValueText = false;
@@ -111,12 +107,6 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
     private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
     //@Setter @Getter TODO
-    private SelectionChanged mSelectionChanged;
-
-    //@Setter @Getter TODO
-    private SelectionMoved mSelectionMoved;
-
-    //@Setter @Getter TODO
     private int controlShadowSize = 12;
 
     //@Setter @Getter @ColorInt TODO
@@ -136,16 +126,6 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
 
     //@Getter TODO
     private float overlayBarValue = 50f;
-
-    //@Getter TODO
-    private float barValue = 75f;
-
-    public void setBarValue(float barValue) {
-
-        this.barValue = barValue;
-
-        invalidate();
-    }
 
     public void setOverlayBarValue(float overlayBarValue) {
 
@@ -212,11 +192,11 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
             //mOverlayPaint.setColor(ContextCompat.getColor(getContext(), controlColor)); TODO
         }
 
-        float length = ((getWidth() - (controlRadius * 2)) / (mMaxVal - mMinVal)) * (barValue - mMinVal);
+        float length = ((getWidth() - (controlRadius * 2)) / (config.maxBarValue - config.minBarValue)) * (config.barValue - config.minBarValue);
 
         mBar.set(controlRadius, shadowRadius + halfMargin, length + controlRadius, getHeight() - shadowRadius - halfMargin);
 
-        mBarPaint.setColor(mColorFormatter.getColor(barValue, mMaxVal, mMinVal));
+        mBarPaint.setColor(mColorFormatter.getColor(config.barValue, config.maxBarValue, config.minBarValue));
 
         drawBackgroundBar(canvas, shadowRadius, halfMargin, controlRadius);
 
@@ -245,7 +225,7 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
 
     private void drawOverlayBar(Canvas canvas, float halfShadow, float halfMargin, float controlRadius) {
 
-        float length = ((getWidth() - (controlRadius * 2)) / (mMaxVal - mMinVal)) * (overlayBarValue - mMinVal);
+        float length = ((getWidth() - (controlRadius * 2)) / (config.maxBarValue - config.minBarValue)) * (overlayBarValue - config.minBarValue);
 
         mBarOverlay.set(length + controlRadius, halfShadow + halfMargin, getWidth(), getHeight() - halfShadow - halfMargin);
 
@@ -254,35 +234,6 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
         // mBarOverlay.height() / 2f, mBarOverlay.height() / 2f
 
         canvas.drawRect(mBarOverlay, paint);
-    }
-
-    /**
-     * Sets the minimum and maximum value the bar can display.
-     *
-     * @param min Minimum value.
-     * @param max Maximum value.
-     */
-    public void setMinMax(float min, float max) {
-        mMaxVal = max;
-        mMinVal = min;
-    }
-
-    /**
-     * Returns the maximum value the bar can display.
-     *
-     * @return Maximum value.
-     */
-    public float getMax() {
-        return mMaxVal;
-    }
-
-    /**
-     * Returns the minimum value the bar can display.
-     *
-     * @return Minimum value.
-     */
-    public float getMin() {
-        return mMinVal;
     }
 
     /**
@@ -311,69 +262,6 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
      */
     public RectF getBar() {
         return mBar;
-    }
-
-    /**
-     * Animates the bar from a specific value to a specific value.
-     *
-     * @param from Test
-     * @param to Test
-     * @param durationMillis Test
-     */
-    public void animate(float from, float to, int durationMillis) {
-
-        if (from < mMinVal)
-            from = mMinVal;
-        if (from > mMaxVal)
-            from = mMaxVal;
-
-        if (to < mMinVal)
-            to = mMinVal;
-        if (to > mMaxVal)
-            to = mMaxVal;
-
-        barValue = from;
-        mAnimator = ObjectAnimator.ofFloat(this, "barValue", from, to);
-        mAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
-        mAnimator.setDuration(durationMillis);
-        mAnimator.addUpdateListener(this);
-        mAnimator.start();
-    }
-
-    /**
-     * Animates the bar up from it's minimum value to the specified value.
-     *
-     * @param to Test
-     * @param durationMillis Test
-     */
-    public void animateUp(float to, int durationMillis) {
-
-        if (to > mMaxVal)
-            to = mMaxVal;
-
-        mAnimator = ObjectAnimator.ofFloat(this, "barValue", barValue, to);
-        mAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
-        mAnimator.setDuration(durationMillis);
-        mAnimator.addUpdateListener(this);
-        mAnimator.start();
-    }
-
-    /**
-     * Animates the bar down from it's current value to the specified value.
-     *
-     * @param to Test
-     * @param durationMillis Test
-     */
-    public void animateDown(float to, int durationMillis) {
-
-        if (to < mMinVal)
-            to = mMinVal;
-
-        mAnimator = ObjectAnimator.ofFloat(this, "barValue", barValue, to);
-        mAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
-        mAnimator.setDuration(durationMillis);
-        mAnimator.addUpdateListener(this);
-        mAnimator.start();
     }
 
     @Override
@@ -482,7 +370,8 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
     public float getValueForPosition(int xPos) {
 
         float factor = xPos / getWidth();
-        return mMaxVal * factor;
+
+        return config.maxBarValue * factor;
     }
 
     /**
@@ -518,8 +407,8 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
                     updateValue(x, y);
                     invalidate();
 
-                    if (mSelectionMoved != null) {
-                        mSelectionMoved.onSelectionMoved(barValue, mMaxVal, mMinVal, this);
+                    if (config.onSelectionMoved != null) {
+                        config.onSelectionMoved.onSelectionMoved(config.barValue, config.maxBarValue, config.minBarValue, this);
                     }
 
                     break;
@@ -527,8 +416,8 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
                     updateValue(x, y);
                     invalidate();
 
-                    if (mSelectionChanged != null) {
-                        mSelectionChanged.onValueChanged(barValue, mMaxVal, mMinVal, this);
+                    if (config.onSelectionChanged != null) {
+                        config.onSelectionChanged.onSelectionChanged(config.barValue, config.maxBarValue, config.minBarValue, this);
                     }
 
                     break;
@@ -548,13 +437,13 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
         float newVal;
 
         if (x <= 0)
-            newVal = mMinVal;
+            newVal = config.minBarValue;
         else if (x > getWidth())
-            newVal = mMaxVal;
+            newVal = config.maxBarValue;
         else {
             float factor = x / getWidth();
 
-            newVal = (mMaxVal - mMinVal) * factor + mMinVal;
+            newVal = (config.maxBarValue - config.minBarValue) * factor + config.minBarValue;
         }
 
         if (mInterval > 0f) {
@@ -570,7 +459,7 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
             }
         }
 
-        barValue = newVal;
+        config.barValue = newVal;
     }
 
     /**
@@ -587,6 +476,152 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
         @Override
         public int getColor(float value, float maxVal, float minVal) {
             return mColor;
+        }
+    }
+
+    public static class Config {
+
+        private final SuperBar superBar;
+
+        private Config(SuperBar superBar) {
+
+            this.superBar = superBar;
+        }
+
+        private OnSelectionChanged onSelectionChanged;
+        private OnSelectionMoved onSelectionMoved;
+
+        private float barValue = 75f;
+
+        private float minBarValue = 0f;
+        private float maxBarValue = 100f;
+
+        /**
+         * Set a callback to be fired when the current bar selection
+         * value is changed by the user.
+         *
+         * @param onSelectionChanged Selection changed callback.
+         */
+        @SuppressWarnings("unused")
+        public void setSelectedChanged(OnSelectionChanged onSelectionChanged) {
+
+            this.onSelectionChanged = onSelectionChanged;
+        }
+
+        /***
+         * Set a callback to be fired when the current bar selection
+         * value if moved by the user.
+         *
+         * @param onSelectionMoved Selection moved callback.
+         */
+        @SuppressWarnings("unused")
+        public void setOnSelectionMoved(OnSelectionMoved onSelectionMoved) {
+
+            this.onSelectionMoved = onSelectionMoved;
+        }
+
+        /**
+         * Get the current value of the bar.
+         *
+         * @return Current value of the bar.
+         */
+        @SuppressWarnings("unused")
+        public float getBarValue() {
+
+            return barValue;
+        }
+
+        /**
+         * Set bar value from it's current position to another
+         * value within it's bounds.
+         *
+         * @param durationMillis Duration in milliseconds - if null will not animate.
+         *
+         * @param barValue Target bar value.
+         */
+        @SuppressWarnings("unused")
+        public void setBarValue(Integer durationMillis, float barValue) {
+
+            setBarValue(durationMillis, barValue, this.barValue);
+        }
+
+        /**
+         * Set bar value from any value within it's bounds to another
+         * value within it's bounds.
+         *
+         * @param durationMillis Duration in milliseconds - if null will not animate.
+         *
+         * @param barValue Target bar value.
+         * @param barValueFrom Starting bar value.
+         */
+        public void setBarValue(Integer durationMillis, float barValue, float barValueFrom) {
+
+            if (barValueFrom < minBarValue) {
+                barValueFrom = minBarValue;
+            }
+
+            if (barValueFrom > maxBarValue) {
+                barValueFrom = maxBarValue;
+            }
+
+            if (barValue < minBarValue) {
+                barValue = minBarValue;
+            }
+
+            if (barValue > maxBarValue) {
+                barValue = maxBarValue;
+            }
+
+            if (durationMillis == null) {
+
+                this.barValue = barValue;
+
+                superBar.invalidate();
+
+            } else {
+
+                final ObjectAnimator animator = ObjectAnimator.ofFloat(this, "barValue", barValueFrom, barValue);
+
+                animator.setInterpolator(new AccelerateDecelerateInterpolator());
+                animator.setDuration(durationMillis);
+                animator.addUpdateListener(superBar);
+                animator.start();
+            }
+        }
+
+        /**
+         * Sets the minimum and maximum value the bar can display.
+         *
+         * @param minBarValue Minimum value.
+         * @param maxBarValue Maximum value.
+         */
+        @SuppressWarnings("unused")
+        public void setBarValueBounds(float minBarValue, float maxBarValue) {
+
+            this.maxBarValue = maxBarValue;
+            this.minBarValue = minBarValue;
+        }
+
+        /**
+         * Returns the maximum value the bar can display.
+         *
+         * @return Maximum value.
+         */
+        @SuppressWarnings("unused")
+        public float getMaxBarValue() {
+
+            return maxBarValue;
+        }
+
+        /**
+         * Returns the minimum value the bar can display.
+         *
+         * @return Minimum value.
+         */
+        @SuppressWarnings("unused")
+        public float getMinBarValue() {
+
+            return minBarValue;
         }
     }
 }
