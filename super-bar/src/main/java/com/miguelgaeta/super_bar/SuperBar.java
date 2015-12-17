@@ -171,13 +171,13 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
         float barTop = shadowRadius + halfMargin;
         float barBot = getHeight() - shadowRadius - halfMargin;
 
-        drawBackgroundBar(canvas, shadowRadius, halfMargin, controlRadius);
+        drawBackgroundBar(canvas, barTop, barBot, controlRadius);
 
         drawBar(canvas, barTop, barBot, controlRadius, length);
 
         final float controlX = mBar.right;
 
-        drawOverlayBar(canvas, mBarBackground.height() / 2f, shadowRadius, halfMargin, controlRadius);
+        drawOverlayBar(canvas, barTop, barBot, controlRadius);
 
         paint.setColor(controlColor, shadowRadius, controlShadowColor);
 
@@ -195,24 +195,24 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
         canvas.drawRoundRect(mBar, mBar.height() / 2f, mBar.height() / 2f, paint);
     }
 
-    private void drawBackgroundBar(Canvas canvas, float halfShadow, float halfMargin, float controlRadius) {
+    private void drawBackgroundBar(Canvas canvas, float barTop, float barBot, float controlRadius) {
 
-        mBarBackground.set(controlRadius, halfShadow + halfMargin, getWidth() - controlRadius, getHeight() - halfShadow - halfMargin);
+        mBarBackground.set(controlRadius, barTop, getWidth() - controlRadius, barBot);
 
         paint.setColor(config.backgroundColor);
 
         canvas.drawRoundRect(mBarBackground, mBarBackground.height() / 2f, mBarBackground.height() / 2f, paint);
     }
 
-    private void drawOverlayBar(Canvas canvas, float cornerRadius, float halfShadow, float halfMargin, float controlRadius) {
+    private void drawOverlayBar(Canvas canvas, float barTop, float barBot, float controlRadius) {
 
         float length = ((getWidth() - (controlRadius * 2)) / (config.maxBarValue - config.minBarValue)) * (config.overlayBarValue - config.minBarValue);
 
-        mBar.set(length + controlRadius, halfShadow + halfMargin, getWidth() - controlRadius, getHeight() - halfShadow - halfMargin);
+        mBar.set(length + controlRadius, barTop, getWidth() - controlRadius, barBot);
 
         paint.setColor(config.overlayBarColor.getColor(config.overlayBarValue, config.maxBarValue, config.minBarValue));
 
-        canvas.drawRoundRect(mBar, cornerRadius, cornerRadius, paint);
+        canvas.drawRoundRect(mBar, mBar.height() / 2f, mBar.height() / 2f, paint);
     }
 
     @Override
