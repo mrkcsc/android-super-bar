@@ -310,15 +310,14 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
                 return true;
 
             float x = e.getX();
-            float y = e.getY();
 
             switch (e.getAction()) {
 
                 case MotionEvent.ACTION_DOWN:
-                    updateValue(x, y);
+                    updateValue(x);
                     invalidate();
                 case MotionEvent.ACTION_MOVE:
-                    updateValue(x, y);
+                    updateValue(x);
                     invalidate();
 
                     if (config.onSelectionMoved != null) {
@@ -327,7 +326,7 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
 
                     break;
                 case MotionEvent.ACTION_UP:
-                    updateValue(x, y);
+                    updateValue(x);
                     invalidate();
 
                     if (config.onSelectionChanged != null) {
@@ -346,7 +345,7 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
     /**
      * Updates the value on the ValueBar depending on the touch position.
      */
-    private void updateValue(float x, float y) {
+    private void updateValue(float x) {
 
         float newVal;
 
