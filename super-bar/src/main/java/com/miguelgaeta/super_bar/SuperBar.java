@@ -128,9 +128,6 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
     //@Setter @Getter TODO
     private int barMargin = 12;
 
-    //@Setter @Getter @ColorInt TODO
-    private int backgroundBarColor = Color.GREEN;
-
     /**
      * Do all preparations.
      */
@@ -193,7 +190,7 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
 
         mBarBackground.set(controlRadius, halfShadow + halfMargin, getWidth() - controlRadius, getHeight() - halfShadow - halfMargin);
 
-        paint.setColor(backgroundBarColor);
+        paint.setColor(config.backgroundColor);
 
         canvas.drawRoundRect(mBarBackground, mBarBackground.height() / 2f, mBarBackground.height() / 2f, paint);
     }
@@ -296,6 +293,12 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
 
         private final View view;
 
+        /**
+         * Paint instance with a view subclass for
+         * simple configuration.
+         *
+         * @param view Associated view to paint.
+         */
         private Painter(View view) {
             super();
 
@@ -305,12 +308,25 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
             setStyle(Paint.Style.FILL);
         }
 
+        /**
+         * Set color of instance.
+         *
+         * @param color Target color.
+         */
         @Override
         public void setColor(int color) {
 
             setColor(color, null, 0);
         }
 
+        /**
+         * Set color of instance and optionally a shadow layer
+         * if not in edit mode.
+         *
+         * @param color Target color.
+         * @param shadowRadius Shadow radius, null for no shadow.
+         * @param shadowColor Shadow color.
+         */
         private void setColor(int color, Float shadowRadius, int shadowColor) {
 
             if (!view.isInEditMode() && shadowRadius != null) {
@@ -344,6 +360,8 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
         private float maxBarValue = 100f;
 
         private float barInterval = 1f;
+
+        private int backgroundColor = Color.GREEN;
 
         private ColorFormatter color = new ColorFormatter.Solid(Color.BLUE);
 
@@ -605,6 +623,17 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
         public void setTouchEnabled(boolean touchEnabled) {
 
             this.touchEnabled = touchEnabled;
+        }
+
+        /**
+         * Set background color for the bar.
+         *
+         * @param backgroundColor Target background color.
+         */
+        @SuppressWarnings("unused")
+        public void setBackgroundColor(int backgroundColor) {
+
+            this.backgroundColor = backgroundColor;
         }
     }
 }
