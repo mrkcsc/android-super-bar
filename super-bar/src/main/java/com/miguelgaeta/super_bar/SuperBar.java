@@ -2,7 +2,6 @@ package com.miguelgaeta.super_bar;
 
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -104,7 +103,6 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
     private Paint mOverlayPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
     private boolean mDrawValueText = false;
-    private boolean mTouchEnabled = true;
 
     public SuperBar(Context context) {
         super(context);
@@ -246,14 +244,7 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
         invalidate();
     }
 
-    /**
-     * Set this to true to enable touch gestures on the ValueBar.
-     *
-     * @param enabled Test
-     */
-    public void setTouchEnabled(boolean enabled) {
-        mTouchEnabled = enabled;
-    }
+
 
     /**
      * Set this to true to enable drawing the actual value that is currently
@@ -288,48 +279,48 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
         return config.maxBarValue * factor;
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     @Override
-    public boolean onTouchEvent(MotionEvent e) { // TODO
-        if (mTouchEnabled) {
+    public boolean onTouchEvent(MotionEvent motionEvent) {
 
-            if (config.gestureDetector != null &&
-                config.gestureDetector.onTouchEvent(e)) {
+        if (!config.touchEnabled) {
 
-                return true;
-            }
+            return super.onTouchEvent(motionEvent);
+        }
 
-            float x = e.getX();
-
-            switch (e.getAction()) {
-
-                case MotionEvent.ACTION_DOWN:
-                    updateValue(x);
-                    invalidate();
-                case MotionEvent.ACTION_MOVE:
-                    updateValue(x);
-                    invalidate();
-
-                    if (config.onSelectionMoved != null) {
-                        config.onSelectionMoved.onSelectionMoved(config.barValue, config.maxBarValue, config.minBarValue, this);
-                    }
-
-                    break;
-                case MotionEvent.ACTION_UP:
-                    updateValue(x);
-                    invalidate();
-
-                    if (config.onSelectionChanged != null) {
-                        config.onSelectionChanged.onSelectionChanged(config.barValue, config.maxBarValue, config.minBarValue, this);
-                    }
-
-                    break;
-            }
+        if (config.gestureDetector != null &&
+            config.gestureDetector.onTouchEvent(motionEvent)) {
 
             return true;
         }
-        else
-            return super.onTouchEvent(e);
+
+        float x = motionEvent.getX();
+
+        switch (motionEvent.getAction()) {
+
+            case MotionEvent.ACTION_DOWN:
+                updateValue(x);
+                invalidate();
+            case MotionEvent.ACTION_MOVE:
+                updateValue(x);
+                invalidate();
+
+                if (config.onSelectionMoved != null) {
+                    config.onSelectionMoved.onSelectionMoved(config.barValue, config.maxBarValue, config.minBarValue, this);
+                }
+
+                break;
+            case MotionEvent.ACTION_UP:
+                updateValue(x);
+                invalidate();
+
+                if (config.onSelectionChanged != null) {
+                    config.onSelectionChanged.onSelectionChanged(config.barValue, config.maxBarValue, config.minBarValue, this);
+                }
+
+                break;
+        }
+
+        return true;
     }
 
     /**
@@ -387,6 +378,8 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
         private ColorFormatter colorFormatter = new ColorFormatter.Solid(Color.BLUE);
 
         private GestureDetector gestureDetector;
+
+        private boolean touchEnabled = true;
 
         /**
          * Set a callback to be fired when the current bar selection
@@ -577,6 +570,17 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
         public void setGestureDetector(GestureDetector gestureDetector) {
 
             this.gestureDetector = gestureDetector;
+        }
+
+        /**
+         * Set this to true to enable touch gestures on the bar control.
+         *
+         * @param touchEnabled Is touch enabled.
+         */
+        @SuppressWarnings("unused")
+        public void setTouchEnabled(boolean touchEnabled) {
+
+            this.touchEnabled = touchEnabled;
         }
     }
 }
