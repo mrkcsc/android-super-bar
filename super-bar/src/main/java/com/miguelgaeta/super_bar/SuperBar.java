@@ -35,6 +35,26 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
          * @return Color integer for current values.
          */
         int getColor(float value, float maxValue, float minValue);
+
+        /**
+         * Default color formatter that just returns
+         * a single color.
+         */
+        class Solid implements ColorFormatter {
+
+            private int color;
+
+            public Solid(int color) {
+
+                this.color = color;
+            }
+
+            @Override
+            public int getColor(float value, float maxVal, float minVal) {
+
+                return color;
+            }
+        }
     }
 
     public interface OnSelectionChanged {
@@ -70,9 +90,11 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
 
     private final Config config = new Config(this);
 
+    @SuppressWarnings("unused")
+    public Config getConfig() {
 
-
-
+        return config;
+    }
 
     private RectF mBar;
     private RectF mBarBackground;
@@ -85,8 +107,6 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
     private boolean mDrawBorder = false;
     private boolean mDrawValueText = false;
     private boolean mTouchEnabled = true;
-
-    private ColorFormatter mColorFormatter;
 
     public SuperBar(Context context) {
         super(context);
@@ -158,8 +178,6 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
         mOverlayPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mOverlayPaint.setStyle(Paint.Style.FILL);
 
-        mColorFormatter = new DefaultColorFormatterValue(Color.rgb(39, 140, 230));
-
         setOnTouchListener(new OnTouchListener() {
 
             @Override
@@ -201,7 +219,7 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
 
         mBar.set(controlRadius, shadowRadius + halfMargin, length + controlRadius, getHeight() - shadowRadius - halfMargin);
 
-        mBarPaint.setColor(mColorFormatter.getColor(config.barValue, config.maxBarValue, config.minBarValue));
+        mBarPaint.setColor(config.colorFormatter.getColor(config.barValue, config.maxBarValue, config.minBarValue));
 
         drawBackgroundBar(canvas, shadowRadius, halfMargin, controlRadius);
 
@@ -280,31 +298,6 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
      */
     public void setBorderColor(int color) {
         mBorderPaint.setColor(color);
-    }
-
-    /**
-     * Sets a custom BarColorFormatter for the ValueBar. Implement the
-     * BarColorFormatter interface in your own formatter class and return
-     * whatever color you like from the getColor(...) method. You can for
-     * example make the color depend on the current value of the bar. Provide
-     * null to reset all changes.
-     *
-     * @param formatter Test
-     */
-    public void setColorFormatter(ColorFormatter formatter) {
-
-        if (formatter == null)
-            formatter = new DefaultColorFormatterValue(Color.rgb(39, 140, 230));
-        mColorFormatter = formatter;
-    }
-
-    /**
-     * Sets the color the ValueBar should have.
-     *
-     * @param color Color
-     */
-    public void setColor(int color) {
-        mColorFormatter = new DefaultColorFormatterValue(color);
     }
 
     /**
@@ -446,23 +439,6 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
         config.barValue = newVal;
     }
 
-    /**
-     * Default BarColorFormatter class that supports a single color.
-     */
-    private class DefaultColorFormatterValue implements ColorFormatter {
-
-        private int mColor;
-
-        public DefaultColorFormatterValue(int color) {
-            mColor = color;
-        }
-
-        @Override
-        public int getColor(float value, float maxVal, float minVal) {
-            return mColor;
-        }
-    }
-
     public static class Config {
 
         private final SuperBar superBar;
@@ -481,6 +457,8 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
         private float maxBarValue = 100f;
 
         private float barInterval = 1f;
+
+        private ColorFormatter colorFormatter = new ColorFormatter.Solid(Color.BLUE);
 
         /**
          * Set a callback to be fired when the current bar selection
@@ -633,6 +611,32 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
         public float getBarInterval() {
 
             return barInterval;
+        }
+
+        /**
+         * Sets a custom color formatter for the bar.
+         *
+         * @param colorFormatter Color formatter.
+         */
+        public void setColor(ColorFormatter colorFormatter) {
+
+            if (colorFormatter == null) {
+
+                return;
+            }
+
+            this.colorFormatter = colorFormatter;
+        }
+
+        /**
+         * Set a solid color for the bar.
+         *
+         * @param color Color.
+         */
+        @SuppressWarnings("unused")
+        public void setColor(int color) {
+
+            setColor(new ColorFormatter.Solid(color));
         }
     }
 }
