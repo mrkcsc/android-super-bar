@@ -168,14 +168,12 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
 
         float length = ((getWidth() - (controlRadius * 2)) / (config.maxBarValue - config.minBarValue)) * (config.barValue - config.minBarValue);
 
-        mBar.set(controlRadius, shadowRadius + halfMargin, length + controlRadius, getHeight() - shadowRadius - halfMargin);
+        float barTop = shadowRadius + halfMargin;
+        float barBot = getHeight() - shadowRadius - halfMargin;
 
         drawBackgroundBar(canvas, shadowRadius, halfMargin, controlRadius);
 
-        paint.setColor(config.color.getColor(config.barValue, config.maxBarValue, config.minBarValue));
-
-        // draw the value-bar
-        canvas.drawRoundRect(mBar, mBar.height() / 2f, mBar.height() / 2f, paint);
+        drawBar(canvas, barTop, barBot, controlRadius, length);
 
         final float controlX = mBar.right;
 
@@ -185,6 +183,16 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
 
         // Dragging control.
         canvas.drawCircle(controlX, (getHeight() / 2f), controlRadius - shadowRadius, paint);
+    }
+
+    private void drawBar(Canvas canvas, float barTop, float barBot, float controlRadius, float length) {
+
+        paint.setColor(config.color.getColor(config.barValue, config.maxBarValue, config.minBarValue));
+
+        mBar.set(controlRadius, barTop, length + controlRadius, barBot);
+
+        // draw the value-bar
+        canvas.drawRoundRect(mBar, mBar.height() / 2f, mBar.height() / 2f, paint);
     }
 
     private void drawBackgroundBar(Canvas canvas, float halfShadow, float halfMargin, float controlRadius) {
