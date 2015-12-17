@@ -8,8 +8,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -64,34 +62,34 @@ public class ValueBar extends View implements ValueAnimator.AnimatorUpdateListen
 
     private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
-    //@Setter @Getter
+    //@Setter @Getter TODO
     private ValueBarSelectionChanged mSelectionChanged;
 
-    //@Setter @Getter
+    //@Setter @Getter TODO
     private ValueBarSelectionMoved mSelectionMoved;
 
-    //@Setter @Getter
+    //@Setter @Getter TODO
     private int controlShadowSize = 12;
 
-    //@Setter @Getter @ColorInt
+    //@Setter @Getter @ColorInt TODO
     private int controlShadowColor = Color.argb(127, 0, 0, 0);
 
-    //@Setter @Getter @ColorRes
+    //@Setter @Getter @ColorRes TODO
     private int controlColor = android.R.color.white;
 
-    //@Setter @Getter
+    //@Setter @Getter TODO
     private int barMargin = 12;
 
-    //@Setter @Getter @ColorInt
+    //@Setter @Getter @ColorInt TODO
     private int backgroundBarColor = Color.GREEN;
 
-    //@Setter @Getter @ColorInt
+    //@Setter @Getter @ColorInt TODO
     private int overlayBarColor = Color.TRANSPARENT;
 
-    //@Getter
+    //@Getter TODO
     private float overlayBarValue = 50f;
 
-    //@Getter
+    //@Getter TODO
     private float barValue = 75f;
 
     public void setBarValue(float barValue) {
@@ -163,7 +161,7 @@ public class ValueBar extends View implements ValueAnimator.AnimatorUpdateListen
         if (!isInEditMode()) {
 
             mOverlayPaint.setShadowLayer(shadowRadius, 0f, 0f, controlShadowColor);
-            mOverlayPaint.setColor(ContextCompat.getColor(getContext(), controlColor));
+            //mOverlayPaint.setColor(ContextCompat.getColor(getContext(), controlColor)); TODO
         }
 
         float length = ((getWidth() - (controlRadius * 2)) / (mMaxVal - mMinVal)) * (barValue - mMinVal);
@@ -212,6 +210,9 @@ public class ValueBar extends View implements ValueAnimator.AnimatorUpdateListen
 
     /**
      * Sets the minimum and maximum value the bar can display.
+     *
+     * @param min Minimum value.
+     * @param max Maximum value.
      */
     public void setMinMax(float min, float max) {
         mMaxVal = max;
@@ -220,6 +221,8 @@ public class ValueBar extends View implements ValueAnimator.AnimatorUpdateListen
 
     /**
      * Returns the maximum value the bar can display.
+     *
+     * @return Maximum value.
      */
     public float getMax() {
         return mMaxVal;
@@ -227,14 +230,18 @@ public class ValueBar extends View implements ValueAnimator.AnimatorUpdateListen
 
     /**
      * Returns the minimum value the bar can display.
+     *
+     * @return Minimum value.
      */
     public float getMin() {
         return mMinVal;
     }
 
     /**
-     * Sets the interval in which the values can be chosen and dispalyed from /
-     * on the ValueBar. If interval <= 0, there is no interval.
+     * Sets the interval in which the values can be chosen and dismayed from
+     * on the ValueBar. If interval less than 0, there is no interval.
+     *
+     * @param interval Value interval.
      */
     public void setInterval(float interval) {
         mInterval = interval;
@@ -242,6 +249,8 @@ public class ValueBar extends View implements ValueAnimator.AnimatorUpdateListen
 
     /**
      * Returns the interval in which values can be chosen and displayed.
+     *
+     * @return Value interval.
      */
     public float getInterval() {
         return mInterval;
@@ -249,6 +258,8 @@ public class ValueBar extends View implements ValueAnimator.AnimatorUpdateListen
 
     /**
      * Returns the bar that represents the value.
+     *
+     * @return Bar rectangle.
      */
     public RectF getBar() {
         return mBar;
@@ -256,6 +267,10 @@ public class ValueBar extends View implements ValueAnimator.AnimatorUpdateListen
 
     /**
      * Animates the bar from a specific value to a specific value.
+     *
+     * @param from Test
+     * @param to Test
+     * @param durationMillis Test
      */
     public void animate(float from, float to, int durationMillis) {
 
@@ -279,6 +294,9 @@ public class ValueBar extends View implements ValueAnimator.AnimatorUpdateListen
 
     /**
      * Animates the bar up from it's minimum value to the specified value.
+     *
+     * @param to Test
+     * @param durationMillis Test
      */
     public void animateUp(float to, int durationMillis) {
 
@@ -294,6 +312,9 @@ public class ValueBar extends View implements ValueAnimator.AnimatorUpdateListen
 
     /**
      * Animates the bar down from it's current value to the specified value.
+     *
+     * @param to Test
+     * @param durationMillis Test
      */
     public void animateDown(float to, int durationMillis) {
 
@@ -316,6 +337,8 @@ public class ValueBar extends View implements ValueAnimator.AnimatorUpdateListen
     /**
      * Set this to true to enable drawing the border around the bar, or false to
      * disable it.
+     *
+     * @param enabled Test
      */
     public void setDrawBorder(boolean enabled) {
         mDrawBorder = enabled;
@@ -323,6 +346,8 @@ public class ValueBar extends View implements ValueAnimator.AnimatorUpdateListen
 
     /**
      * Sets the width of the border around the bar (if drawn).
+     *
+     * @param width Test
      */
     public void setBorderWidth(float width) {
         mBorderPaint.setStrokeWidth(width);
@@ -330,6 +355,8 @@ public class ValueBar extends View implements ValueAnimator.AnimatorUpdateListen
 
     /**
      * Sets the color of the border around the bar (if drawn).
+     *
+     * @param color Test
      */
     public void setBorderColor(int color) {
         mBorderPaint.setColor(color);
@@ -341,6 +368,8 @@ public class ValueBar extends View implements ValueAnimator.AnimatorUpdateListen
      * whatever color you like from the getColor(...) method. You can for
      * example make the color depend on the current value of the bar. Provide
      * null to reset all changes.
+     *
+     * @param formatter Test
      */
     public void setColorFormatter(ValueBarColorFormatter formatter) {
 
@@ -351,6 +380,8 @@ public class ValueBar extends View implements ValueAnimator.AnimatorUpdateListen
 
     /**
      * Sets the color the ValueBar should have.
+     *
+     * @param color Color
      */
     public void setColor(int color) {
         mColorFormatter = new DefaultColorFormatterValue(color);
@@ -358,6 +389,8 @@ public class ValueBar extends View implements ValueAnimator.AnimatorUpdateListen
 
     /**
      * Returns the paint object that is used for drawing the bar.
+     *
+     * @return Test
      */
     public Paint getBarPaint() {
         return mBarPaint;
@@ -365,6 +398,8 @@ public class ValueBar extends View implements ValueAnimator.AnimatorUpdateListen
 
     /**
      * Set this to true to enable touch gestures on the ValueBar.
+     *
+     * @param enabled Test
      */
     public void setTouchEnabled(boolean enabled) {
         mTouchEnabled = enabled;
@@ -373,6 +408,8 @@ public class ValueBar extends View implements ValueAnimator.AnimatorUpdateListen
     /**
      * Set this to true to enable drawing the actual value that is currently
      * displayed onto the bar.
+     *
+     * @param enabled Test
      */
     public void setDrawValueText(boolean enabled) {
         mDrawValueText = enabled;
@@ -381,6 +418,8 @@ public class ValueBar extends View implements ValueAnimator.AnimatorUpdateListen
     /**
      * Returns true if drawing the text that describes the actual value is
      * enabled.
+     *
+     * @return Test
      */
     public boolean isDrawValueTextEnabled() {
         return mDrawValueText;
@@ -389,6 +428,8 @@ public class ValueBar extends View implements ValueAnimator.AnimatorUpdateListen
     /**
      * Returns the corresponding value for a pixel-position on the horizontal
      * axis.
+     *
+     * @param xPos test
      */
     public float getValueForPosition(int xPos) {
 
@@ -398,6 +439,8 @@ public class ValueBar extends View implements ValueAnimator.AnimatorUpdateListen
 
     /**
      * Sets a GestureDetector for the ValueBar to receive callbacks on gestures.
+     *
+     * @param gd Test
      */
     public void setGestureDetector(GestureDetector gd) {
         mGestureDetector = gd;
@@ -408,7 +451,7 @@ public class ValueBar extends View implements ValueAnimator.AnimatorUpdateListen
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
-    public boolean onTouchEvent(@NonNull MotionEvent e) {
+    public boolean onTouchEvent(MotionEvent e) { // TODO
         if (mTouchEnabled) {
 
             // if the detector recognized a gesture, consume it
@@ -484,8 +527,6 @@ public class ValueBar extends View implements ValueAnimator.AnimatorUpdateListen
 
     /**
      * Default BarColorFormatter class that supports a single color.
-     *
-     * @author Philipp Jahoda
      */
     private class DefaultColorFormatterValue implements ValueBarColorFormatter {
 
