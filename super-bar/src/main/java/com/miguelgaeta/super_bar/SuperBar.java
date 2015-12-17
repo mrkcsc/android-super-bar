@@ -99,8 +99,6 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
     private RectF mBarBackground = new RectF();
     private RectF mBarOverlay = new RectF();
 
-    private final Paint mBarPaint = getPaintInstance();
-    private final Paint mOverlayPaint = getPaintInstance();
     private final Paint paint = getPaintInstance();
 
     public SuperBar(Context context) {
@@ -125,7 +123,7 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
     private int controlShadowColor = Color.argb(127, 0, 0, 0);
 
     //@Setter @Getter @ColorRes TODO
-    private int controlColor = Color.WHITE;
+    private int controlColor = Color.YELLOW;
 
     //@Setter @Getter TODO
     private int barMargin = 12;
@@ -185,34 +183,30 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
 
         final float controlRadius = (getHeight() / 2f);
 
-        if (!isInEditMode()) {
-
-            mOverlayPaint.setShadowLayer(shadowRadius, 0f, 0f, controlShadowColor);
-            mOverlayPaint.setColor(controlColor);
-        }
-
         float length = ((getWidth() - (controlRadius * 2)) / (config.maxBarValue - config.minBarValue)) * (config.barValue - config.minBarValue);
 
         mBar.set(controlRadius, shadowRadius + halfMargin, length + controlRadius, getHeight() - shadowRadius - halfMargin);
 
-        mBarPaint.setColor(config.colorFormatter.getColor(config.barValue, config.maxBarValue, config.minBarValue));
-
         drawBackgroundBar(canvas, shadowRadius, halfMargin, controlRadius);
 
+        configurePaint(config.colorFormatter.getColor(config.barValue, config.maxBarValue, config.minBarValue));
+
         // draw the value-bar
-        canvas.drawRoundRect(mBar, mBar.height() / 2f, mBar.height() / 2f, mBarPaint);
+        canvas.drawRoundRect(mBar, mBar.height() / 2f, mBar.height() / 2f, paint);
 
         drawOverlayBar(canvas, shadowRadius, halfMargin, controlRadius);
 
+        configurePaint(controlColor, shadowRadius, controlShadowColor);
+
         // Dragging control.
-        canvas.drawCircle(mBar.right, (getHeight() / 2f), controlRadius - shadowRadius, mOverlayPaint);
+        canvas.drawCircle(mBar.right, (getHeight() / 2f), controlRadius - shadowRadius, paint);
     }
 
     private void drawBackgroundBar(Canvas canvas, float halfShadow, float halfMargin, float controlRadius) {
 
         mBarBackground.set(controlRadius, halfShadow + halfMargin, getWidth() - controlRadius, getHeight() - halfShadow - halfMargin);
 
-        paint.setColor(backgroundBarColor);
+        configurePaint(backgroundBarColor);
 
         canvas.drawRoundRect(mBarBackground, mBarBackground.height() / 2f, mBarBackground.height() / 2f, paint);
     }
@@ -223,7 +217,7 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
 
         mBarOverlay.set(length + controlRadius, halfShadow + halfMargin, getWidth() - controlRadius, getHeight() - halfShadow - halfMargin);
 
-        paint.setColor(overlayBarColor);
+        configurePaint(overlayBarColor);
 
         canvas.drawRoundRect(mBarOverlay, mBarBackground.height() / 2f, mBarBackground.height() / 2f, paint);
     }
@@ -322,6 +316,25 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
         }
 
         config.barValue = newVal;
+    }
+
+    private void configurePaint(int color) {
+
+        configurePaint(color, null, 0);
+    }
+
+    private void configurePaint(int color, Float shadowRadius, int shadowColor) {
+
+        if (!isInEditMode() && shadowRadius != null) {
+
+            paint.setShadowLayer(shadowRadius, 0f, 0f, shadowColor);
+
+        } else {
+
+            paint.clearShadowLayer();
+        }
+
+        paint.setColor(color);
     }
 
     private Paint getPaintInstance() {
