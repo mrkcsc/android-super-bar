@@ -99,8 +99,9 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
     private RectF mBarBackground = new RectF();
     private RectF mBarOverlay = new RectF();
 
-    private Paint mBarPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private Paint mOverlayPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint mBarPaint = getPaintInstance();
+    private final Paint mOverlayPaint = getPaintInstance();
+    private final Paint paint = getPaintInstance();
 
     public SuperBar(Context context) {
         super(context);
@@ -116,8 +117,6 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
         super(context, attrs, defStyleAttr);
         init();
     }
-
-    private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
     //@Setter @Getter TODO
     private int controlShadowSize = 12;
@@ -152,15 +151,8 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
      */
     private void init() {
 
-        // Standard fill style.
-        paint.setStyle(Paint.Style.FILL);
-
         // Needed to render shadow.
         setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-
-        mBarPaint.setStyle(Paint.Style.FILL);
-
-        mOverlayPaint.setStyle(Paint.Style.FILL);
 
         setOnTouchListener(new OnTouchListener() {
 
@@ -330,6 +322,16 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
         }
 
         config.barValue = newVal;
+    }
+
+    private Paint getPaintInstance() {
+
+        final Paint paint = new Paint();
+
+        paint.setFlags(Paint.ANTI_ALIAS_FLAG);
+        paint.setStyle(Paint.Style.FILL);
+
+        return paint;
     }
 
     public static class Config {
