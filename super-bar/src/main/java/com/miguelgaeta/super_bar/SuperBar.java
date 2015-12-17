@@ -102,8 +102,6 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
     private Paint mBarPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private Paint mOverlayPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
-    private boolean mDrawValueText = false;
-
     public SuperBar(Context context) {
         super(context);
         init();
@@ -242,28 +240,6 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
     public void onAnimationUpdate(ValueAnimator va) {
 
         invalidate();
-    }
-
-
-
-    /**
-     * Set this to true to enable drawing the actual value that is currently
-     * displayed onto the bar.
-     *
-     * @param enabled Test
-     */
-    public void setDrawValueText(boolean enabled) {
-        mDrawValueText = enabled;
-    }
-
-    /**
-     * Returns true if drawing the text that describes the actual value is
-     * enabled.
-     *
-     * @return Test
-     */
-    public boolean isDrawValueTextEnabled() {
-        return mDrawValueText;
     }
 
     /**
