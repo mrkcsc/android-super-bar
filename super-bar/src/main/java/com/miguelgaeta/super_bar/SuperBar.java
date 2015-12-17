@@ -96,15 +96,13 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
         return config;
     }
 
-    private RectF mBar;
-    private RectF mBarBackground;
-    private RectF mBarOverlay;
+    private RectF mBar = new RectF();
+    private RectF mBarBackground = new RectF();
+    private RectF mBarOverlay = new RectF();
 
-    private Paint mBarPaint;
-    private Paint mBorderPaint;
-    private Paint mOverlayPaint;
+    private Paint mBarPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private Paint mOverlayPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
-    private boolean mDrawBorder = false;
     private boolean mDrawValueText = false;
     private boolean mTouchEnabled = true;
 
@@ -164,18 +162,8 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
         // Needed to render shadow.
         setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 
-        mBar = new RectF();
-        mBarBackground = new RectF();
-        mBarOverlay = new RectF();
-
-        mBarPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mBarPaint.setStyle(Paint.Style.FILL);
 
-        mBorderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mBorderPaint.setStyle(Paint.Style.STROKE);
-        mBorderPaint.setStrokeWidth(4);
-
-        mOverlayPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mOverlayPaint.setStyle(Paint.Style.FILL);
 
         setOnTouchListener(new OnTouchListener() {
@@ -228,11 +216,6 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
 
         drawOverlayBar(canvas, shadowRadius, halfMargin, controlRadius);
 
-        // draw the border
-        if (mDrawBorder)
-            canvas.drawRect(0, 0, getWidth(), getHeight(),
-                mBorderPaint);
-
         // Dragging control.
         canvas.drawCircle(mBar.right, (getHeight() / 2f), controlRadius - shadowRadius, mOverlayPaint);
     }
@@ -261,34 +244,6 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
     public void onAnimationUpdate(ValueAnimator va) {
 
         invalidate();
-    }
-
-    /**
-     * Set this to true to enable drawing the border around the bar, or false to
-     * disable it.
-     *
-     * @param enabled Test
-     */
-    public void setDrawBorder(boolean enabled) {
-        mDrawBorder = enabled;
-    }
-
-    /**
-     * Sets the width of the border around the bar (if drawn).
-     *
-     * @param width Test
-     */
-    public void setBorderWidth(float width) {
-        mBorderPaint.setStrokeWidth(width);
-    }
-
-    /**
-     * Sets the color of the border around the bar (if drawn).
-     *
-     * @param color Test
-     */
-    public void setBorderColor(int color) {
-        mBorderPaint.setColor(color);
     }
 
     /**
