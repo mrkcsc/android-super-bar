@@ -1,3 +1,3 @@
 # android-super-bar
 
-A value bar with style.
+A full confirgurable value bar with an optional overlay bar and control widget slider to adjust the value.
