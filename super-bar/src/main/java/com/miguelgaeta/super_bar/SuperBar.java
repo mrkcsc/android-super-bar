@@ -257,15 +257,6 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
         canvas.drawRoundRect(mBarOverlay, mBarBackground.height() / 2f, mBarBackground.height() / 2f, paint);
     }
 
-    /**
-     * Returns the bar that represents the value.
-     *
-     * @return Bar rectangle.
-     */
-    public RectF getBar() {
-        return mBar;
-    }
-
     @Override
     public void onAnimationUpdate(ValueAnimator va) {
 
@@ -298,15 +289,6 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
      */
     public void setBorderColor(int color) {
         mBorderPaint.setColor(color);
-    }
-
-    /**
-     * Returns the paint object that is used for drawing the bar.
-     *
-     * @return Test
-     */
-    public Paint getBarPaint() {
-        return mBarPaint;
     }
 
     /**
