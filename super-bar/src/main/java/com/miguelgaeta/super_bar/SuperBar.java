@@ -97,7 +97,6 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
 
     private RectF mBar = new RectF();
     private RectF mBarBackground = new RectF();
-    private RectF mBarOverlay = new RectF();
 
     private final Painter paint = new Painter(this);
 
@@ -178,12 +177,14 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
         // draw the value-bar
         canvas.drawRoundRect(mBar, mBar.height() / 2f, mBar.height() / 2f, paint);
 
-        drawOverlayBar(canvas, shadowRadius, halfMargin, controlRadius);
+        final float controlX = mBar.right;
+
+        drawOverlayBar(canvas, mBarBackground.height() / 2f, shadowRadius, halfMargin, controlRadius);
 
         paint.setColor(controlColor, shadowRadius, controlShadowColor);
 
         // Dragging control.
-        canvas.drawCircle(mBar.right, (getHeight() / 2f), controlRadius - shadowRadius, paint);
+        canvas.drawCircle(controlX, (getHeight() / 2f), controlRadius - shadowRadius, paint);
     }
 
     private void drawBackgroundBar(Canvas canvas, float halfShadow, float halfMargin, float controlRadius) {
@@ -195,15 +196,15 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
         canvas.drawRoundRect(mBarBackground, mBarBackground.height() / 2f, mBarBackground.height() / 2f, paint);
     }
 
-    private void drawOverlayBar(Canvas canvas, float halfShadow, float halfMargin, float controlRadius) {
+    private void drawOverlayBar(Canvas canvas, float cornerRadius, float halfShadow, float halfMargin, float controlRadius) {
 
         float length = ((getWidth() - (controlRadius * 2)) / (config.maxBarValue - config.minBarValue)) * (config.overlayBarValue - config.minBarValue);
 
-        mBarOverlay.set(length + controlRadius, halfShadow + halfMargin, getWidth() - controlRadius, getHeight() - halfShadow - halfMargin);
+        mBar.set(length + controlRadius, halfShadow + halfMargin, getWidth() - controlRadius, getHeight() - halfShadow - halfMargin);
 
         paint.setColor(config.overlayBarColor.getColor(config.overlayBarValue, config.maxBarValue, config.minBarValue));
 
-        canvas.drawRoundRect(mBarOverlay, mBarBackground.height() / 2f, mBarBackground.height() / 2f, paint);
+        canvas.drawRoundRect(mBar, cornerRadius, cornerRadius, paint);
     }
 
     @Override
@@ -369,7 +370,7 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
 
         private boolean touchEnabled = true;
 
-        private float overlayBarValue = 90f;
+        private float overlayBarValue = 80f;
 
         private ColorFormatter overlayBarColor = new ColorFormatter.Solid(Color.RED);
 
