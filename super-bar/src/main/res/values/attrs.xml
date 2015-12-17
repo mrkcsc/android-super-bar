@@ -1,0 +1,9 @@
+<resources>
+
+    <declare-styleable name="SuperBar">
+
+        <attr name="sb_barValue" format="float"/>
+
+    </declare-styleable>
+
+</resources>

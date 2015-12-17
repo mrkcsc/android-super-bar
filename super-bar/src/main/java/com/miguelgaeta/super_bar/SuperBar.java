@@ -87,6 +87,8 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
         void onSelectionMoved(float value, float maxValue, float minValue, SuperBar superBar);
     }
 
+    private final SuperBarAttributes attrs = new SuperBarAttributes(this);
+
     private final Config config = new Config(this);
 
     @SuppressWarnings("unused")
@@ -106,11 +108,17 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
 
     public SuperBar(Context context, AttributeSet attrs) {
         super(context, attrs);
+
+        this.attrs.parse(attrs, 0);
+
         init();
     }
 
     public SuperBar(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+
+        this.attrs.parse(attrs, defStyleAttr);
+
         init();
     }
     /**
@@ -118,7 +126,6 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
      */
     private void init() {
 
-        // Needed to render shadow.
         setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 
         setOnTouchListener(new OnTouchListener() {
