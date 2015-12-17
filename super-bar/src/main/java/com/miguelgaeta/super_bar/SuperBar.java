@@ -15,10 +15,58 @@ import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
 /**
+ * A value bar with style.
+ *
  * Created by Miguel Gaeta on 6/11/15.
  */
-@SuppressWarnings({"unused", "Convert2Lambda"})
-public class ValueBar extends View implements ValueAnimator.AnimatorUpdateListener {
+public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListener {
+
+    public interface ColorFormatter {
+
+        /**
+         * Given the current state of the bar, return the
+         * desired color integer.
+         *
+         * @param value Current value of the bar.
+         *
+         * @param maxValue Maximum value the bar can display.
+         * @param minValue Minimum value the bar can display.
+         *
+         * @return Color integer for current values.
+         */
+        int getColor(float value, float maxValue, float minValue);
+    }
+
+    public interface SelectionChanged {
+
+        /**
+         * Called when the user releases his finger from the ValueBar.
+         *
+         * @param value Current value of the bar.
+         *
+         * @param maxValue Maximum value the bar can display.
+         * @param minValue Minimum value the bar can display.
+         *
+         *
+         * @param superBar Associated instance.
+         */
+        void onValueChanged(float value, float maxValue, float minValue, SuperBar superBar);
+    }
+
+    public interface SelectionMoved {
+
+        /**
+         * Called every time the user moves the finger on the ValueBar.
+         *
+         * @param value Current value of the bar.
+         *
+         * @param maxValue Maximum value the bar can display.
+         * @param minValue Minimum value the bar can display.
+         *
+         * @param superBar Associated instance.
+         */
+        void onSelectionMoved(float value, float maxValue, float minValue, SuperBar superBar);
+    }
 
     /** minimum value the bar can display */
     private float mMinVal = 0f;
@@ -43,19 +91,19 @@ public class ValueBar extends View implements ValueAnimator.AnimatorUpdateListen
     private boolean mDrawValueText = false;
     private boolean mTouchEnabled = true;
 
-    private ValueBarColorFormatter mColorFormatter;
+    private ColorFormatter mColorFormatter;
 
-    public ValueBar(Context context) {
+    public SuperBar(Context context) {
         super(context);
         init();
     }
 
-    public ValueBar(Context context, AttributeSet attrs) {
+    public SuperBar(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public ValueBar(Context context, AttributeSet attrs, int defStyleAttr) {
+    public SuperBar(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
@@ -63,10 +111,10 @@ public class ValueBar extends View implements ValueAnimator.AnimatorUpdateListen
     private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
     //@Setter @Getter TODO
-    private ValueBarSelectionChanged mSelectionChanged;
+    private SelectionChanged mSelectionChanged;
 
     //@Setter @Getter TODO
-    private ValueBarSelectionMoved mSelectionMoved;
+    private SelectionMoved mSelectionMoved;
 
     //@Setter @Getter TODO
     private int controlShadowSize = 12;
@@ -371,7 +419,7 @@ public class ValueBar extends View implements ValueAnimator.AnimatorUpdateListen
      *
      * @param formatter Test
      */
-    public void setColorFormatter(ValueBarColorFormatter formatter) {
+    public void setColorFormatter(ColorFormatter formatter) {
 
         if (formatter == null)
             formatter = new DefaultColorFormatterValue(Color.rgb(39, 140, 230));
@@ -528,7 +576,7 @@ public class ValueBar extends View implements ValueAnimator.AnimatorUpdateListen
     /**
      * Default BarColorFormatter class that supports a single color.
      */
-    private class DefaultColorFormatterValue implements ValueBarColorFormatter {
+    private class DefaultColorFormatterValue implements ColorFormatter {
 
         private int mColor;
 
