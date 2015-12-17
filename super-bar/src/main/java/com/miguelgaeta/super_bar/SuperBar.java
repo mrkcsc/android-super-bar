@@ -228,19 +228,6 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
         invalidate();
     }
 
-    /**
-     * Returns the corresponding value for a pixel-position on the horizontal
-     * axis.
-     *
-     * @param xPos test
-     */
-    public float getValueForPosition(int xPos) {
-
-        float factor = xPos / getWidth();
-
-        return config.maxBarValue * factor;
-    }
-
     @Override
     public boolean onTouchEvent(MotionEvent motionEvent) {
 
