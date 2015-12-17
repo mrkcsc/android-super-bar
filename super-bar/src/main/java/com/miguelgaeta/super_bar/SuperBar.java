@@ -72,8 +72,7 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
 
 
 
-    /** the interval in which values can be chosen and displayed */
-    private float mInterval = 1f;
+
 
     private RectF mBar;
     private RectF mBarBackground;
@@ -122,10 +121,10 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
     private int backgroundBarColor = Color.GREEN;
 
     //@Setter @Getter @ColorInt TODO
-    private int overlayBarColor = Color.TRANSPARENT;
+    private int overlayBarColor = Color.parseColor("#CCFF0000");
 
     //@Getter TODO
-    private float overlayBarValue = 50f;
+    private float overlayBarValue = 90f;
 
     public void setOverlayBarValue(float overlayBarValue) {
 
@@ -162,15 +161,21 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
         mColorFormatter = new DefaultColorFormatterValue(Color.rgb(39, 140, 230));
 
         setOnTouchListener(new OnTouchListener() {
+
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
 
                 view.getParent().requestDisallowInterceptTouchEvent(true);
+
                 switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
+
                     case MotionEvent.ACTION_UP:
+
                         view.getParent().requestDisallowInterceptTouchEvent(false);
+
                         break;
                 }
+
                 return false;
             }
         });
@@ -227,32 +232,11 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
 
         float length = ((getWidth() - (controlRadius * 2)) / (config.maxBarValue - config.minBarValue)) * (overlayBarValue - config.minBarValue);
 
-        mBarOverlay.set(length + controlRadius, halfShadow + halfMargin, getWidth(), getHeight() - halfShadow - halfMargin);
+        mBarOverlay.set(length + controlRadius, halfShadow + halfMargin, getWidth() - controlRadius, getHeight() - halfShadow - halfMargin);
 
         paint.setColor(overlayBarColor);
 
-        // mBarOverlay.height() / 2f, mBarOverlay.height() / 2f
-
-        canvas.drawRect(mBarOverlay, paint);
-    }
-
-    /**
-     * Sets the interval in which the values can be chosen and dismayed from
-     * on the ValueBar. If interval less than 0, there is no interval.
-     *
-     * @param interval Value interval.
-     */
-    public void setInterval(float interval) {
-        mInterval = interval;
-    }
-
-    /**
-     * Returns the interval in which values can be chosen and displayed.
-     *
-     * @return Value interval.
-     */
-    public float getInterval() {
-        return mInterval;
+        canvas.drawRoundRect(mBarOverlay, mBarBackground.height() / 2f, mBarBackground.height() / 2f, paint);
     }
 
     /**
@@ -446,16 +430,16 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
             newVal = (config.maxBarValue - config.minBarValue) * factor + config.minBarValue;
         }
 
-        if (mInterval > 0f) {
+        if (config.barInterval > 0f) {
 
-            float remainder = newVal % mInterval;
+            float remainder = newVal % config.barInterval;
 
             // check if the new value is closer to the next, or the previous
-            if (remainder <= mInterval / 2f) {
+            if (remainder <= config.barInterval / 2f) {
 
                 newVal = newVal - remainder;
             } else {
-                newVal = newVal - remainder + mInterval;
+                newVal = newVal - remainder + config.barInterval;
             }
         }
 
@@ -491,10 +475,12 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
         private OnSelectionChanged onSelectionChanged;
         private OnSelectionMoved onSelectionMoved;
 
-        private float barValue = 75f;
+        private float barValue = 40f;
 
         private float minBarValue = 0f;
         private float maxBarValue = 100f;
+
+        private float barInterval = 1f;
 
         /**
          * Set a callback to be fired when the current bar selection
@@ -622,6 +608,31 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
         public float getMinBarValue() {
 
             return minBarValue;
+        }
+
+        /**
+         * Sets the interval in which the values can be chosen and displayed
+         * from the bar slider.
+         *
+         * If interval less than 0, there is no interval.
+         *
+         * @param barInterval Bar value interval.
+         */
+        @SuppressWarnings("unused")
+        public void setBarInterval(float barInterval) {
+
+            this.barInterval = barInterval;
+        }
+
+        /**
+         * Returns bar interval.
+         *
+         * @return Bar interval.
+         */
+        @SuppressWarnings("unused")
+        public float getBarInterval() {
+
+            return barInterval;
         }
     }
 }
