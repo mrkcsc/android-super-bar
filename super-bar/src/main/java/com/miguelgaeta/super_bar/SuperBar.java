@@ -113,19 +113,6 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
         super(context, attrs, defStyleAttr);
         init();
     }
-
-    //@Setter @Getter TODO
-    private int controlShadowSize = 12;
-
-    //@Setter @Getter @ColorInt TODO
-    private int controlShadowColor = Color.argb(127, 0, 0, 0);
-
-    //@Setter @Getter @ColorRes TODO
-    private int controlColor = Color.YELLOW;
-
-    //@Setter @Getter TODO
-    private int barMargin = 12;
-
     /**
      * Do all preparations.
      */
@@ -159,9 +146,9 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        final float shadowRadius = controlShadowSize / 2f;
+        final float shadowRadius = config.controlShadowSize / 2f;
 
-        final float halfMargin = barMargin / 2f;
+        final float halfMargin = config.barMargin / 2f;
 
         final float controlRadius = (getHeight() / 2f);
 
@@ -176,7 +163,7 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
 
         drawOverlayBar(canvas, barTop, barBot, controlRadius, config.overlayBarValue);
 
-        paint.setColor(controlColor, shadowRadius, controlShadowColor);
+        paint.setColor(config.controlColor, shadowRadius, config.controlShadowColor);
 
         // Dragging control.
         canvas.drawCircle(controlX, (getHeight() / 2f), controlRadius - shadowRadius, paint);
@@ -363,6 +350,8 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
 
         private float barValue = 40f;
 
+        private int barMargin = 12;
+
         private float minBarValue = 0f;
         private float maxBarValue = 100f;
 
@@ -379,6 +368,65 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
         private float overlayBarValue = 80f;
 
         private ColorFormatter overlayBarColor = new ColorFormatter.Solid(Color.RED);
+
+        private int controlShadowSize = 12;
+        private int controlShadowColor = Color.argb(127, 0, 0, 0);
+        private int controlColor = Color.YELLOW;
+
+        /**
+         * Set margin of the bar.
+         *
+         * @param barMargin Margin of the bar.
+         */
+        @SuppressWarnings("unused")
+        public void setBarMargin(int barMargin) {
+
+            this.barMargin =  barMargin;
+        }
+
+        /**
+         * Get margin of the bar.
+         *
+         * @return Margin of the bar.
+         */
+        @SuppressWarnings("unused")
+        public float getBarMargin() {
+
+            return this.barMargin;
+        }
+
+        /**
+         * Set control shadow size in pixels.
+         *
+         * @param controlShadowSize Control shadow size in pixels.
+         */
+        @SuppressWarnings("unused")
+        public void setControlShadowSize(int controlShadowSize) {
+
+            this.controlShadowSize = controlShadowSize;
+        }
+
+        /**
+         * Set control shadow color.
+         *
+         * @param controlShadowColor Control shadow color.
+         */
+        @SuppressWarnings("unused")
+        public void setControlShadowColor(int controlShadowColor) {
+
+            this.controlShadowColor = controlShadowColor;
+        }
+
+        /**
+         * Set control color.
+         *
+         * @param controlColor Control color.
+         */
+        @SuppressWarnings("unused")
+        public void setControlColor(int controlColor) {
+
+            this.controlColor = controlColor;
+        }
 
         /**
          * Set overlay bar value.
