@@ -1,7 +1,6 @@
 package com.miguelgaeta.super_bar;
 
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.util.AttributeSet;
 
 /**
@@ -11,7 +10,7 @@ import android.util.AttributeSet;
  */
 class SuperBarAttributes {
 
-    private final SuperBar superBar;
+    private final SuperBar sb;
 
     /**
      * Initialize with instance of a super bar.
@@ -20,31 +19,56 @@ class SuperBarAttributes {
      */
     SuperBarAttributes(SuperBar superBar) {
 
-        this.superBar = superBar;
+        this.sb = superBar;
     }
 
     void parse(AttributeSet attrs, int defStyleAttr) {
 
-        final TypedArray array = superBar.getContext().obtainStyledAttributes(attrs, R.styleable.SuperBar, defStyleAttr, 0);
+        final TypedArray array = sb.getContext().obtainStyledAttributes(attrs, R.styleable.SuperBar, defStyleAttr, 0);
 
         try {
 
-            superBar.getConfig().setBarValueBounds(
-                array.getFloat(R.styleable.SuperBar_sb_barValueMin, 0f),
-                array.getFloat(R.styleable.SuperBar_sb_barValueMax, 100f));
+            final SuperBarConfig config = sb.getConfig();
 
-            superBar.getConfig().setBarMargin(array.getDimensionPixelSize(R.styleable.SuperBar_sb_barMargin, 12));
-            superBar.getConfig().setBarInterval(array.getFloat(R.styleable.SuperBar_sb_barInterval, 1f));
+            config.setBarValueBounds(
+                array.getFloat(R.styleable.SuperBar_sb_barValueMin, config.getMinBarValue()),
+                array.getFloat(R.styleable.SuperBar_sb_barValueMax, config.getMaxBarValue()));
 
-            superBar.getConfig().setColor(array.getColor(R.styleable.SuperBar_sb_color, Color.BLUE));
-            superBar.getConfig().setBackgroundColor(array.getColor(R.styleable.SuperBar_sb_backgroundColor, Color.GREEN));
+            config.setBarMargin(array.getDimensionPixelSize(R.styleable.SuperBar_sb_barMargin,
+                config.getBarMargin()));
 
-            superBar.getConfig().setTouchEnabled(array.getBoolean(R.styleable.SuperBar_sb_barTouchEnabled, true));
+            config.setBarInterval(array.getFloat(R.styleable.SuperBar_sb_barInterval,
+                config.getBarInterval()));
 
-            superBar.getConfig().setOverlayBarValue(array.getFloat(R.styleable.SuperBar_sb_barOverlayValue, 80f));
-            superBar.getConfig().setOverlayBarColor(array.getColor(R.styleable.SuperBar_sb_barOverlayColor, Color.RED));
+            config.setColor(array.getColor(R.styleable.SuperBar_sb_barColor,
+                config.getColor().getColor(
+                    config.getBarValue(),
+                    config.getMaxBarValue(),
+                    config.getMinBarValue())));
 
-            superBar.getConfig().setBarValue(null, array.getFloat(R.styleable.SuperBar_sb_barValue, 10f));
+            config.setBackgroundColor(array.getColor(R.styleable.SuperBar_sb_barBackgroundColor,
+                config.getBackgroundColor()));
+
+            config.setTouchEnabled(array.getBoolean(R.styleable.SuperBar_sb_barTouchEnabled, config.isTouchEnabled()));
+
+            config.setOverlayBarValue(array.getFloat(R.styleable.SuperBar_sb_barOverlayValue, config.getOverlayBarValue()));
+            config.setOverlayBarColor(array.getColor(R.styleable.SuperBar_sb_barOverlayColor,
+                config.getOverlayBarColor().getColor(
+                    config.getOverlayBarValue(),
+                    config.getMaxBarValue(),
+                    config.getMinBarValue())));
+
+            config.setControlColor(array.getColor(R.styleable.SuperBar_sb_barControlColor,
+                config.getControlColor()));
+
+            config.setControlShadowColor(array.getColor(R.styleable.SuperBar_sb_barControlShadowColor,
+                config.getControlShadowColor()));
+
+            config.setControlShadowSize(array.getDimensionPixelSize(R.styleable.SuperBar_sb_barControlShadowSize,
+                config.getControlShadowSize()));
+
+            config.setBarValue(null, array.getFloat(R.styleable.SuperBar_sb_barValue,
+                config.getBarValue()));
 
         } finally {
 

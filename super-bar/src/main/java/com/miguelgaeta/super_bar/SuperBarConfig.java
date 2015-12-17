@@ -62,7 +62,7 @@ class SuperBarConfig {
      *
      * @return Margin of the bar.
      */
-    public float getBarMargin() {
+    public int getBarMargin() {
 
         return this.barMargin;
     }

@@ -11,10 +11,12 @@
         android:layout_height="26dp"
         android:layout_centerInParent="true"
         android:layout_gravity="center"
-        app:sb_backgroundColor="#666"
+        android:background="#efefef"
+        app:sb_barBackgroundColor="#666"
+        app:sb_barColor="#111"
+        app:sb_barControlColor="#555"
         app:sb_barMargin="12dp"
         app:sb_barOverlayColor="#999"
         app:sb_barOverlayValue="90"
-        app:sb_barValue="60"
-        app:sb_color="@android:color/black"/>
+        app:sb_barValue="60"/>
 </RelativeLayout>

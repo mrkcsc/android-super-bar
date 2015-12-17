@@ -7,11 +7,14 @@
         <attr name="sb_barValueMax" format="float" />
         <attr name="sb_barMargin" format="dimension" />
         <attr name="sb_barInterval" format="float" />
-        <attr name="sb_backgroundColor" format="color|reference" />
-        <attr name="sb_color" format="color|reference" />
+        <attr name="sb_barBackgroundColor" format="color|reference" />
+        <attr name="sb_barColor" format="color|reference" />
         <attr name="sb_barTouchEnabled" format="boolean" />
         <attr name="sb_barOverlayValue" format="float" />
         <attr name="sb_barOverlayColor" format="color|reference" />
+        <attr name="sb_barControlShadowSize" format="dimension" />
+        <attr name="sb_barControlShadowColor" format="color|reference" />
+        <attr name="sb_barControlColor" format="color|reference" />
 
     </declare-styleable>
 
