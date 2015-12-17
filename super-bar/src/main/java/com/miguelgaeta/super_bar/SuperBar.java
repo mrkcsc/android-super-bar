@@ -288,26 +288,16 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
         return config.maxBarValue * factor;
     }
 
-    /**
-     * Sets a GestureDetector for the ValueBar to receive callbacks on gestures.
-     *
-     * @param gd Test
-     */
-    public void setGestureDetector(GestureDetector gd) {
-        mGestureDetector = gd;
-    }
-
-    /** gesturedetector for recognizing single-taps */
-    private GestureDetector mGestureDetector;
-
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent e) { // TODO
         if (mTouchEnabled) {
 
-            // if the detector recognized a gesture, consume it
-            if (mGestureDetector != null && mGestureDetector.onTouchEvent(e))
+            if (config.gestureDetector != null &&
+                config.gestureDetector.onTouchEvent(e)) {
+
                 return true;
+            }
 
             float x = e.getX();
 
@@ -395,6 +385,8 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
         private float barInterval = 1f;
 
         private ColorFormatter colorFormatter = new ColorFormatter.Solid(Color.BLUE);
+
+        private GestureDetector gestureDetector;
 
         /**
          * Set a callback to be fired when the current bar selection
@@ -573,6 +565,18 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
         public void setColor(int color) {
 
             setColor(new ColorFormatter.Solid(color));
+        }
+
+        /**
+         * Set a gesture detector for consumers that wish
+         * to add custom handling of touch events.
+         *
+         * @param gestureDetector Detector that returns true if event is consumed.
+         */
+        @SuppressWarnings("unused")
+        public void setGestureDetector(GestureDetector gestureDetector) {
+
+            this.gestureDetector = gestureDetector;
         }
     }
 }
