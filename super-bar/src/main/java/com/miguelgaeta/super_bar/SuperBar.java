@@ -112,7 +112,7 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
     private int controlShadowColor = Color.argb(127, 0, 0, 0);
 
     //@Setter @Getter @ColorRes TODO
-    private int controlColor = android.R.color.white;
+    private int controlColor = Color.WHITE;
 
     //@Setter @Getter TODO
     private int barMargin = 12;
@@ -194,7 +194,7 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
         if (!isInEditMode()) {
 
             mOverlayPaint.setShadowLayer(shadowRadius, 0f, 0f, controlShadowColor);
-            //mOverlayPaint.setColor(ContextCompat.getColor(getContext(), controlColor)); TODO
+            mOverlayPaint.setColor(controlColor);
         }
 
         float length = ((getWidth() - (controlRadius * 2)) / (config.maxBarValue - config.minBarValue)) * (config.barValue - config.minBarValue);
