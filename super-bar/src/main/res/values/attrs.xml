@@ -2,7 +2,11 @@
 
     <declare-styleable name="SuperBar">
 
-        <attr name="sb_barValue" format="float"/>
+        <attr name="sb_barValue" format="float" />
+        <attr name="sb_barValueMin" format="float" />
+        <attr name="sb_barValueMax" format="float" />
+        <attr name="sb_barMargin" format="dimension" />
+        <attr name="sb_barInterval" format="float" />
 
     </declare-styleable>
 

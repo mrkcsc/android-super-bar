@@ -30,6 +30,13 @@ class SuperBarAttributes {
 
             superBar.getConfig().setBarValue(null, array.getFloat(R.styleable.SuperBar_sb_barValue, 10f));
 
+            superBar.getConfig().setBarValueBounds(
+                array.getFloat(R.styleable.SuperBar_sb_barValueMin, 0f),
+                array.getFloat(R.styleable.SuperBar_sb_barValueMax, 100f));
+
+            superBar.getConfig().setBarMargin(array.getDimensionPixelSize(R.styleable.SuperBar_sb_barMargin, 12));
+            superBar.getConfig().setBarInterval(array.getFloat(R.styleable.SuperBar_sb_barInterval, 1f));
+
         } finally {
 
             array.recycle();
