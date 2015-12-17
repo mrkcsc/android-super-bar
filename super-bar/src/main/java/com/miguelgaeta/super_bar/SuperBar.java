@@ -131,19 +131,6 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
     //@Setter @Getter @ColorInt TODO
     private int backgroundBarColor = Color.GREEN;
 
-    //@Setter @Getter @ColorInt TODO
-    private int overlayBarColor = Color.parseColor("#CCFF0000");
-
-    //@Getter TODO
-    private float overlayBarValue = 90f;
-
-    public void setOverlayBarValue(float overlayBarValue) {
-
-        this.overlayBarValue = overlayBarValue;
-
-        invalidate();
-    }
-
     /**
      * Do all preparations.
      */
@@ -189,7 +176,7 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
 
         drawBackgroundBar(canvas, shadowRadius, halfMargin, controlRadius);
 
-        configurePaint(config.colorFormatter.getColor(config.barValue, config.maxBarValue, config.minBarValue));
+        configurePaint(config.color.getColor(config.barValue, config.maxBarValue, config.minBarValue));
 
         // draw the value-bar
         canvas.drawRoundRect(mBar, mBar.height() / 2f, mBar.height() / 2f, paint);
@@ -213,11 +200,11 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
 
     private void drawOverlayBar(Canvas canvas, float halfShadow, float halfMargin, float controlRadius) {
 
-        float length = ((getWidth() - (controlRadius * 2)) / (config.maxBarValue - config.minBarValue)) * (overlayBarValue - config.minBarValue);
+        float length = ((getWidth() - (controlRadius * 2)) / (config.maxBarValue - config.minBarValue)) * (config.overlayBarValue - config.minBarValue);
 
         mBarOverlay.set(length + controlRadius, halfShadow + halfMargin, getWidth() - controlRadius, getHeight() - halfShadow - halfMargin);
 
-        configurePaint(overlayBarColor);
+        configurePaint(config.overlayBarColor.getColor(config.overlayBarValue, config.maxBarValue, config.minBarValue));
 
         canvas.drawRoundRect(mBarOverlay, mBarBackground.height() / 2f, mBarBackground.height() / 2f, paint);
     }
@@ -353,11 +340,65 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
 
         private float barInterval = 1f;
 
-        private ColorFormatter colorFormatter = new ColorFormatter.Solid(Color.BLUE);
+        private ColorFormatter color = new ColorFormatter.Solid(Color.BLUE);
 
         private GestureDetector gestureDetector;
 
         private boolean touchEnabled = true;
+
+        private float overlayBarValue = 90f;
+
+        private ColorFormatter overlayBarColor = new ColorFormatter.Solid(Color.RED);
+
+        /**
+         * Set overlay bar value.
+
+         * @param overlayBarValue Target bar value.
+         */
+        @SuppressWarnings("unused")
+        public void setOverlayBarValue(float overlayBarValue) {
+
+            this.overlayBarValue = overlayBarValue;
+
+            superBar.invalidate();
+        }
+
+        /**
+         * Get the current value of the overlay bar.
+         *
+         * @return Current value of the overlay bar.
+         */
+        @SuppressWarnings("unused")
+        public float getOverlayBarValue() {
+
+            return overlayBarValue;
+        }
+
+        /**
+         * Sets a custom color formatter for the overlay bar.
+         *
+         * @param colorFormatter Color formatter.
+         */
+        public void setOverlayBarColor(ColorFormatter colorFormatter) {
+
+            if (colorFormatter == null) {
+
+                return;
+            }
+
+            this.overlayBarColor = colorFormatter;
+        }
+
+        /**
+         * Set a solid color for the overlay bar.
+         *
+         * @param color Color.
+         */
+        @SuppressWarnings("unused")
+        public void setOverlayBarColor(int color) {
+
+            setOverlayBarColor(new ColorFormatter.Solid(color));
+        }
 
         /**
          * Set a callback to be fired when the current bar selection
@@ -524,7 +565,7 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
                 return;
             }
 
-            this.colorFormatter = colorFormatter;
+            this.color = colorFormatter;
         }
 
         /**
