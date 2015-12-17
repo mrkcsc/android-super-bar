@@ -186,11 +186,10 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
 
         float length = ((getWidth() - (controlRadius * 2)) / (config.maxBarValue - config.minBarValue)) * (barValue - config.minBarValue);
 
-        paint.setColor(config.color.getColor(config.barValue, config.maxBarValue, config.minBarValue));
-
         mBar.set(controlRadius, barTop, length + controlRadius, barBot);
 
-        // draw the value-bar
+        paint.setColor(config.color.getColor(config.barValue, config.maxBarValue, config.minBarValue));
+
         canvas.drawRoundRect(mBar, mBar.height() / 2f, mBar.height() / 2f, paint);
     }
 
