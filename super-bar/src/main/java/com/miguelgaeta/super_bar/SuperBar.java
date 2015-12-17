@@ -3,7 +3,6 @@ package com.miguelgaeta.super_bar;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -85,6 +84,8 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
 
     private final SuperBarAttributes attrs = new SuperBarAttributes(this);
 
+    private final SuperBarPainter paint = new SuperBarPainter(this);
+
     private final SuperBarConfig config = new SuperBarConfig(this);
 
     @SuppressWarnings("unused")
@@ -95,10 +96,9 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
 
     private RectF mBar = new RectF();
 
-    private final Painter paint = new Painter(this);
-
     public SuperBar(Context context) {
         super(context);
+
         init();
     }
 
@@ -284,58 +284,5 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
         }
 
         config.setBarValue(null, newVal);
-    }
-
-    private static class Painter extends Paint {
-
-        private final View view;
-
-        /**
-         * Paint instance with a view subclass for
-         * simple configuration.
-         *
-         * @param view Associated view to paint.
-         */
-        private Painter(View view) {
-            super();
-
-            this.view = view;
-
-            setFlags(Paint.ANTI_ALIAS_FLAG);
-            setStyle(Paint.Style.FILL);
-        }
-
-        /**
-         * Set color of instance.
-         *
-         * @param color Target color.
-         */
-        @Override
-        public void setColor(int color) {
-
-            setColor(color, null, 0);
-        }
-
-        /**
-         * Set color of instance and optionally a shadow layer
-         * if not in edit mode.
-         *
-         * @param color Target color.
-         * @param shadowRadius Shadow radius, null for no shadow.
-         * @param shadowColor Shadow color.
-         */
-        private void setColor(int color, Float shadowRadius, int shadowColor) {
-
-            if (!view.isInEditMode() && shadowRadius != null) {
-
-                setShadowLayer(shadowRadius, 0f, 0f, shadowColor);
-
-            } else {
-
-                clearShadowLayer();
-            }
-
-            super.setColor(color);
-        }
     }
 }
