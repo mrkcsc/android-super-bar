@@ -1,3 +1,8 @@
+## 1.3.1 - 2015-12-17
+
+- Bar control now insets itself with bar edges instead of centering.
+- Typo on setter.
+
 ## 1.3.0 - 2015-12-17
 
 - Added property to set control height.
