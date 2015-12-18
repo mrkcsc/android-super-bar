@@ -37,9 +37,6 @@ class SuperBarAttributes {
             config.setBarHeight(
                 array.getDimensionPixelSize(R.styleable.SuperBar_sb_barHeight, 0));
 
-            config.setBarMargin(array.getDimensionPixelSize(R.styleable.SuperBar_sb_barMargin,
-                config.getBarMargin()));
-
             config.setBarInterval(array.getFloat(R.styleable.SuperBar_sb_barInterval,
                 config.getBarInterval()));
 

@@ -25,8 +25,6 @@ public class SuperBarConfig {
     private float barHeight = 0f;
     private float barValue = 40f;
 
-    private int barMargin = 12;
-
     private float minBarValue = 0f;
     private float maxBarValue = 100f;
 
@@ -78,26 +76,6 @@ public class SuperBarConfig {
     public void setBarHeight(float barHeight) {
 
         this.barHeight = barHeight;
-    }
-
-    /**
-     * Set margin of the bar.
-     *
-     * @param barMargin Margin of the bar.
-     */
-    public void setBarMargin(int barMargin) {
-
-        this.barMargin =  barMargin;
-    }
-
-    /**
-     * Get margin of the bar.
-     *
-     * @return Margin of the bar.
-     */
-    public int getBarMargin() {
-
-        return this.barMargin;
     }
 
     /**
