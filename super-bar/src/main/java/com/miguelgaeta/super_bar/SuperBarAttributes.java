@@ -61,6 +61,8 @@ class SuperBarAttributes {
                     config.getMaxBarValue(),
                     config.getMinBarValue())));
 
+            config.setControlRadius(array.getDimensionPixelSize(R.styleable.SuperBar_sb_barControlRadius, 0));
+
             config.setControlColor(array.getColor(R.styleable.SuperBar_sb_barControlColor,
                 config.getControlColor()));
 

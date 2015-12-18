@@ -16,6 +16,7 @@
         <attr name="sb_barControlShadowSize" format="dimension" />
         <attr name="sb_barControlShadowColor" format="color|reference" />
         <attr name="sb_barControlColor" format="color|reference" />
+        <attr name="sb_barControlRadius" format="dimension" />
 
     </declare-styleable>
 

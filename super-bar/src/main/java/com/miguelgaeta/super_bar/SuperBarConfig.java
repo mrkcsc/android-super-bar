@@ -47,6 +47,19 @@ public class SuperBarConfig {
     private int controlShadowSize = 12;
     private int controlShadowColor = Color.argb(127, 0, 0, 0);
     private int controlColor = Color.YELLOW;
+    private int controlRadius = 0;
+
+    public int getControlRadius() {
+
+        final int radiusWithShadow = controlRadius + controlShadowSize;
+
+        return (int)(radiusWithShadow > 0 && radiusWithShadow < superBar.getHeight() ? radiusWithShadow : superBar.getHeight() / 2f);
+    }
+
+    public void setControlRadius(int controlRadius) {
+
+        this.controlRadius = controlRadius;
+    }
 
     /**
      * Get the height of the bar but enforce that it
