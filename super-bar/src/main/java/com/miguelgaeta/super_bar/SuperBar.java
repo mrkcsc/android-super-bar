@@ -149,12 +149,27 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
         drawer.draw(canvas);
     }
 
+    /**
+     * When an animation ticks, invalidate the view
+     * so on draw is called again.
+     *
+     * @param valueAnimator Value animator.
+     */
     @Override
-    public void onAnimationUpdate(ValueAnimator va) {
+    public void onAnimationUpdate(ValueAnimator valueAnimator) {
 
         invalidate();
     }
 
+    /**
+     * Intercept touch events for this view and apply
+     * custom draw code to update the bar control
+     * position and dispatch events.
+     *
+     * @param motionEvent Motion event.
+     *
+     * @return True if event is consumed.
+     */
     @Override
     public boolean onTouchEvent(MotionEvent motionEvent) {
 
