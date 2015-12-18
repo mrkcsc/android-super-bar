@@ -1,3 +1,7 @@
+## 1.3.3 - 2015-12-18
+
+- Bar margin config property no longer needed.
+
 ## 1.3.2 - 2015-12-18
 
 - Control shadow attribute changed to radius.  
