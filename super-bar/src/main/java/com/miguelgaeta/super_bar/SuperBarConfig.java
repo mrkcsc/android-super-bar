@@ -22,6 +22,7 @@ public class SuperBarConfig {
     private SuperBar.OnSelectionChanged onSelectionChanged;
     private SuperBar.OnSelectionMoved onSelectionMoved;
 
+    private float barHeight = 0f;
     private float barValue = 40f;
 
     private int barMargin = 12;
@@ -46,6 +47,27 @@ public class SuperBarConfig {
     private int controlShadowSize = 12;
     private int controlShadowColor = Color.argb(127, 0, 0, 0);
     private int controlColor = Color.YELLOW;
+
+    /**
+     * Get the height of the bar but enforce that it
+     * cannot be larger than view bounds.
+     *
+     * @return Bar height.
+     */
+    public float getBarHeight() {
+
+        return barHeight > 0 && barHeight < superBar.getHeight() ? barHeight : superBar.getHeight();
+    }
+
+    /**
+     * Set the bar height.
+     *
+     * @param barHeight Bar height.
+     */
+    public void setBarHeight(float barHeight) {
+
+        this.barHeight = barHeight;
+    }
 
     /**
      * Set margin of the bar.

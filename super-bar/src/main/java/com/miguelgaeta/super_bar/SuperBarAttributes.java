@@ -34,6 +34,9 @@ class SuperBarAttributes {
                 array.getFloat(R.styleable.SuperBar_sb_barValueMin, config.getMinBarValue()),
                 array.getFloat(R.styleable.SuperBar_sb_barValueMax, config.getMaxBarValue()));
 
+            config.setBarHeight(
+                array.getDimensionPixelSize(R.styleable.SuperBar_sb_barHeight, 0));
+
             config.setBarMargin(array.getDimensionPixelSize(R.styleable.SuperBar_sb_barMargin,
                 config.getBarMargin()));
 
