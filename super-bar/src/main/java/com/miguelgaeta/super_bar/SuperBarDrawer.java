@@ -29,7 +29,7 @@ class SuperBarDrawer {
 
         drawBar(canvas, barTop, barBot, sb.config.getBarValue());
 
-        final float controlX = rect.right;
+        final float controlX = rect.right + sb.config.getControlRadius();
 
         drawOverlayBar(canvas, barTop, barBot, sb.config.getOverlayBarValue());
 
@@ -40,7 +40,7 @@ class SuperBarDrawer {
 
         float length = ((sb.getWidth() - (sb.config.getControlRadius() * 2)) / (sb.config.getMaxBarValue() - sb.config.getMinBarValue())) * (barValue - sb.config.getMinBarValue());
 
-        rect.set(sb.config.getControlRadius(), barTop, length + sb.config.getControlRadius(), barBot);
+        rect.set(0, barTop, length, barBot);
 
         sb.paint.setColor(sb.config.getColor().getColor(sb.config.getBarValue(), sb.config.getMaxBarValue(), sb.config.getMinBarValue()));
 
@@ -49,7 +49,7 @@ class SuperBarDrawer {
 
     private void drawBackgroundBar(Canvas canvas, float barTop, float barBot) {
 
-        rect.set(sb.config.getControlRadius(), barTop, sb.getWidth() - sb.config.getControlRadius(), barBot);
+        rect.set(0, barTop, sb.getWidth(), barBot);
 
         sb.paint.setColor(sb.config.getBackgroundColor());
 
@@ -60,7 +60,7 @@ class SuperBarDrawer {
 
         float length = ((sb.getWidth() - (sb.config.getControlRadius() * 2)) / (sb.config.getMaxBarValue() - sb.config.getMinBarValue())) * (barValue - sb.config.getMinBarValue());
 
-        rect.set(length + sb.config.getControlRadius(), barTop, sb.getWidth() - sb.config.getControlRadius(), barBot);
+        rect.set(length, barTop, sb.getWidth(), barBot);
 
         sb.paint.setColor(sb.config.getOverlayBarColor().getColor(
             sb.config.getOverlayBarValue(),
