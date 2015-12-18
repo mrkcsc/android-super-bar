@@ -44,16 +44,14 @@ public class SuperBarConfig {
 
     private SuperBar.ColorFormatter overlayBarColor = new SuperBar.ColorFormatter.Solid(Color.RED);
 
-    private int controlShadowSize = 12;
+    private int controlShadowRadius = 6;
     private int controlShadowColor = Color.argb(127, 0, 0, 0);
     private int controlColor = Color.YELLOW;
     private int controlRadius = 0;
 
     public int getControlRadius() {
 
-        final int radiusWithShadow = controlRadius + controlShadowSize;
-
-        return (int)(radiusWithShadow > 0 && radiusWithShadow < superBar.getHeight() ? radiusWithShadow : superBar.getHeight() / 2f);
+        return (int)(controlRadius > 0 && controlRadius < superBar.getHeight() ? controlRadius : superBar.getHeight() / 2f);
     }
 
     public void setControlRadius(int controlRadius) {
@@ -105,11 +103,11 @@ public class SuperBarConfig {
     /**
      * Set control shadow size in pixels.
      *
-     * @param controlShadowSize Control shadow size in pixels.
+     * @param controlShadowRadius Control shadow radius in pixels.
      */
-    public void setControlShadowSize(int controlShadowSize) {
+    public void setControlShadowRadius(int controlShadowRadius) {
 
-        this.controlShadowSize = controlShadowSize;
+        this.controlShadowRadius = controlShadowRadius;
     }
 
     /**
@@ -117,9 +115,9 @@ public class SuperBarConfig {
      *
      * @return Shadow size of the control knob.
      */
-    public int getControlShadowSize() {
+    public int getControlShadowRadius() {
 
-        return this.controlShadowSize;
+        return this.controlShadowRadius;
     }
 
     /**

@@ -46,7 +46,7 @@ class SuperBarPainter extends Paint {
      * @param shadowRadius Shadow radius, null for no shadow.
      * @param shadowColor Shadow color.
      */
-    void setColor(int color, Float shadowRadius, int shadowColor) {
+    void setColor(int color, Integer shadowRadius, int shadowColor) {
 
         if (!view.isInEditMode() && shadowRadius != null) {
 

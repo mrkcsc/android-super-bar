@@ -13,7 +13,7 @@
         <attr name="sb_barTouchEnabled" format="boolean" />
         <attr name="sb_barOverlayValue" format="float" />
         <attr name="sb_barOverlayColor" format="color|reference" />
-        <attr name="sb_barControlShadowSize" format="dimension" />
+        <attr name="sb_barControlShadowRadius" format="dimension" />
         <attr name="sb_barControlShadowColor" format="color|reference" />
         <attr name="sb_barControlColor" format="color|reference" />
         <attr name="sb_barControlRadius" format="dimension" />

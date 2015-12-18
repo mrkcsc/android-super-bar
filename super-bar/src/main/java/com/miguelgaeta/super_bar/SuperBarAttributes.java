@@ -69,8 +69,8 @@ class SuperBarAttributes {
             config.setControlShadowColor(array.getColor(R.styleable.SuperBar_sb_barControlShadowColor,
                 config.getControlShadowColor()));
 
-            config.setControlShadowSize(array.getDimensionPixelSize(R.styleable.SuperBar_sb_barControlShadowSize,
-                config.getControlShadowSize()));
+            config.setControlShadowRadius(array.getDimensionPixelSize(R.styleable.SuperBar_sb_barControlShadowRadius,
+                config.getControlShadowRadius()));
 
             config.setBarValue(null, array.getFloat(R.styleable.SuperBar_sb_barValue,
                 config.getBarValue()));

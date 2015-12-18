@@ -29,18 +29,16 @@ class SuperBarDrawer {
 
         drawBar(canvas, barTop, barBot, sb.config.getBarValue());
 
-        final float controlX = rect.right + sb.config.getControlRadius();
-
         drawOverlayBar(canvas, barTop, barBot, sb.config.getOverlayBarValue());
 
-        drawControl(canvas, controlX);
+        drawControl(canvas, sb.config.getBarValue());
     }
 
     private void drawBar(Canvas canvas, float barTop, float barBot, float barValue) {
 
-        float length = ((sb.getWidth() - (sb.config.getControlRadius() * 2)) / (sb.config.getMaxBarValue() - sb.config.getMinBarValue())) * (barValue - sb.config.getMinBarValue());
+        float length = ((sb.getWidth() - (sb.config.getControlShadowRadius() * 2)) / (sb.config.getMaxBarValue() - sb.config.getMinBarValue())) * (barValue - sb.config.getMinBarValue());
 
-        rect.set(0, barTop, length, barBot);
+        rect.set(sb.config.getControlShadowRadius(), barTop, length + sb.config.getControlShadowRadius(), barBot);
 
         sb.paint.setColor(sb.config.getColor().getColor(sb.config.getBarValue(), sb.config.getMaxBarValue(), sb.config.getMinBarValue()));
 
@@ -49,7 +47,7 @@ class SuperBarDrawer {
 
     private void drawBackgroundBar(Canvas canvas, float barTop, float barBot) {
 
-        rect.set(0, barTop, sb.getWidth(), barBot);
+        rect.set(sb.config.getControlShadowRadius(), barTop, sb.getWidth() - sb.config.getControlShadowRadius(), barBot);
 
         sb.paint.setColor(sb.config.getBackgroundColor());
 
@@ -58,9 +56,9 @@ class SuperBarDrawer {
 
     private void drawOverlayBar(Canvas canvas, float barTop, float barBot, float barValue) {
 
-        float length = ((sb.getWidth() - (sb.config.getControlRadius() * 2)) / (sb.config.getMaxBarValue() - sb.config.getMinBarValue())) * (barValue - sb.config.getMinBarValue());
+        float length = ((sb.getWidth() - (sb.config.getControlShadowRadius() * 2)) / (sb.config.getMaxBarValue() - sb.config.getMinBarValue())) * (barValue - sb.config.getMinBarValue());
 
-        rect.set(length, barTop, sb.getWidth(), barBot);
+        rect.set(length + sb.config.getControlShadowRadius(), barTop, sb.getWidth() - sb.config.getControlShadowRadius(), barBot);
 
         sb.paint.setColor(sb.config.getOverlayBarColor().getColor(
             sb.config.getOverlayBarValue(),
@@ -70,15 +68,22 @@ class SuperBarDrawer {
         canvas.drawRoundRect(rect, rect.height() / 2f, rect.height() / 2f, sb.paint);
     }
 
-    private void drawControl(Canvas canvas, float controlX) {
+    private void drawControl(Canvas canvas, float barValue) {
 
-        final float shadowRadius = sb.config.getControlShadowSize() / 2f;
+        float controlX = ((sb.getWidth() -
+            (sb.config.getControlShadowRadius() * 2 + sb.config.getControlRadius() * 2)) /
+            (sb.config.getMaxBarValue() - sb.config.getMinBarValue())) * (barValue - sb.config.getMinBarValue());
 
-        sb.paint.setColor(sb.config.getControlColor(), shadowRadius, sb.config.getControlShadowColor());
+        controlX += sb.config.getControlRadius() + sb.config.getControlShadowRadius();
+
+        sb.paint.setColor(
+            sb.config.getControlColor(),
+            sb.config.getControlShadowRadius(),
+            sb.config.getControlShadowColor());
 
         canvas.drawCircle(controlX,
             sb.getHeight() / 2f,
-            sb.config.getControlRadius() - shadowRadius,
+            sb.config.getControlRadius(),
             sb.paint);
     }
 
