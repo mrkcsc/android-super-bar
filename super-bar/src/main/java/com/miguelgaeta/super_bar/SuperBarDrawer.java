@@ -95,17 +95,9 @@ class SuperBarDrawer {
             return true;
         }
 
-        float x = motionEvent.getX();
-
         switch (motionEvent.getAction()) {
 
-            case MotionEvent.ACTION_DOWN:
-
-                updateValue(sb.config, x);
-
             case MotionEvent.ACTION_MOVE:
-
-                updateValue(sb.config, x);
 
                 if (sb.config.getOnSelectionMoved() != null) {
                     sb.config.getOnSelectionMoved().onSelectionMoved(
@@ -118,8 +110,6 @@ class SuperBarDrawer {
 
             case MotionEvent.ACTION_UP:
 
-                updateValue(sb.config, x);
-
                 if (sb.config.getOnSelectionChanged() != null) {
                     sb.config.getOnSelectionChanged().onSelectionChanged(
                         sb.config.getBarValue(),
@@ -130,42 +120,47 @@ class SuperBarDrawer {
                 break;
         }
 
+        switch (motionEvent.getAction()) {
+
+            case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_MOVE:
+            case MotionEvent.ACTION_UP:
+
+                float barValue;
+
+                if (motionEvent.getX() <= 0) {
+
+                    barValue = sb.config.getMinBarValue();
+
+                } else if (motionEvent.getX() > sb.getWidth()) {
+
+                    barValue = sb.config.getMaxBarValue();
+
+                } else {
+
+                    float factor = motionEvent.getX() / sb.getWidth();
+
+                    barValue = (sb.config.getMaxBarValue() - sb.config.getMinBarValue()) * factor + sb.config.getMinBarValue();
+                }
+
+                if (sb.config.getBarInterval() > 0f) {
+
+                    float remainder = barValue % sb.config.getBarInterval();
+
+                    if (remainder <= sb.config.getBarInterval() / 2f) {
+
+                        barValue = barValue - remainder;
+                    } else {
+                        barValue = barValue - remainder + sb.config.getBarInterval();
+                    }
+                }
+
+                sb.config.setBarValue(null, barValue);
+                sb.invalidate();
+
+                break;
+        }
+
         return true;
-    }
-
-    private void updateValue(SuperBarConfig config, float x) {
-
-        float newVal;
-
-        if (x <= 0) {
-            newVal = config.getMinBarValue();
-
-        } else if (x > sb.getWidth()) {
-
-            newVal = config.getMaxBarValue();
-
-        } else {
-
-            float factor = x / sb.getWidth();
-
-            newVal = (config.getMaxBarValue() - config.getMinBarValue()) * factor + config.getMinBarValue();
-        }
-
-        if (config.getBarInterval() > 0f) {
-
-            float remainder = newVal % config.getBarInterval();
-
-            // check if the new value is closer to the next, or the previous
-            if (remainder <= config.getBarInterval() / 2f) {
-
-                newVal = newVal - remainder;
-            } else {
-                newVal = newVal - remainder + config.getBarInterval();
-            }
-        }
-
-        config.setBarValue(null, newVal);
-
-        sb.invalidate();
     }
 }

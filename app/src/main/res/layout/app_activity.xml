@@ -15,7 +15,7 @@
         app:sb_barBackgroundColor="#666"
         app:sb_barColor="#111"
         app:sb_barHeight="5dp"
-        app:sb_barControlRadius="2dp"
+        app:sb_barControlRadius="4dp"
         app:sb_barControlColor="#fff"
         app:sb_barMargin="12dp"
         app:sb_barControlShadowSize="0dp"
