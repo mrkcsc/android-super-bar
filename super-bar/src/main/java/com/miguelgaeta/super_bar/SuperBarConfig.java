@@ -225,7 +225,8 @@ public class SuperBarConfig {
      *
      * @param onSelectionChanged Selection changed callback.
      */
-    public void setSelectedChanged(SuperBar.OnSelectionChanged onSelectionChanged) {
+    @SuppressWarnings("unused")
+    public void setOnSelectedChanged(SuperBar.OnSelectionChanged onSelectionChanged) {
 
         this.onSelectionChanged = onSelectionChanged;
     }
@@ -425,6 +426,7 @@ public class SuperBarConfig {
      *
      * @param gestureDetector Detector that returns true if event is consumed.
      */
+    @SuppressWarnings("unused")
     public void setGestureDetector(GestureDetector gestureDetector) {
 
         this.gestureDetector = gestureDetector;
