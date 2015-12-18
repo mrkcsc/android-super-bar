@@ -16,9 +16,10 @@
         app:sb_barColor="#111"
         app:sb_barHeight="5dp"
         app:sb_barControlRadius="2dp"
-        app:sb_barControlColor="#555"
+        app:sb_barControlColor="#fff"
         app:sb_barMargin="12dp"
-        app:sb_barOverlayColor="#999"
+        app:sb_barControlShadowSize="0dp"
+        app:sb_barOverlayColor="#222"
         app:sb_barOverlayValue="90"
         app:sb_barValue="60"/>
 </RelativeLayout>
