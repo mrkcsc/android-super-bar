@@ -10,7 +10,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
  *
  * Created by Miguel Gaeta on 12/17/15.
  */
-class SuperBarConfig {
+public class SuperBarConfig {
 
     private final SuperBar superBar;
 
