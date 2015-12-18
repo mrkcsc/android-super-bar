@@ -1,3 +1,9 @@
+## 1.3.2 - 2015-12-18
+
+- Control shadow attribute changed to radius.  
+- Control shadow not part of control height. 
+- Control bounds adjust to contain shadow.
+
 ## 1.3.1 - 2015-12-17
 
 - Bar control now insets itself with bar edges instead of centering.

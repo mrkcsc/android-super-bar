@@ -8,7 +8,7 @@ A full configurable value bar with an optional overlay bar and control widget sl
 
 ```groovy
 
-compile 'com.miguelgaeta.android-super-bar:super-bar:1.3.1'
+compile 'com.miguelgaeta.android-super-bar:super-bar:1.3.2'
 
 ```
 
