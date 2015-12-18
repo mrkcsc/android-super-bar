@@ -1,3 +1,8 @@
+## 1.3.0 - 2015-12-17
+
+- Added property to set control height.
+- Added property to set bar height.
+
 ## 1.2.1 - 2015-12-17
 
 - Fix config class not being public.
