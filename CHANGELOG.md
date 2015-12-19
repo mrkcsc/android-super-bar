@@ -1,3 +1,8 @@
+## 1.3.4 - 2015-12-18
+
+- Fixed a recursion bug caused by disabling touch.
+- Fixed broken animation when setting bar value.
+
 ## 1.3.3 - 2015-12-18
 
 - Bar margin config property no longer needed.
