@@ -307,6 +307,17 @@ public class SuperBarConfig {
     }
 
     /**
+     * Private setter needed for the object animator.
+     *
+     * @param barValue Desired bar value.
+     */
+    @SuppressWarnings("unused")
+    private void setBarValue(float barValue) {
+
+        this.barValue = barValue;
+    }
+
+    /**
      * Sets the minimum and maximum value the bar can display.
      *
      * @param minBarValue Minimum value.
