@@ -173,6 +173,11 @@ public class SuperBar extends View implements ValueAnimator.AnimatorUpdateListen
     @Override
     public boolean onTouchEvent(MotionEvent motionEvent) {
 
+        if (!config.isTouchEnabled()) {
+
+            return super.onTouchEvent(motionEvent);
+        }
+
         return drawer.onTouchEvent(motionEvent);
     }
 }

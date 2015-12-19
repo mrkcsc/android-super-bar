@@ -89,11 +89,6 @@ class SuperBarDrawer {
 
     public boolean onTouchEvent(MotionEvent motionEvent) {
 
-        if (!sb.config.isTouchEnabled()) {
-
-            return sb.onTouchEvent(motionEvent);
-        }
-
         if (sb.config.getGestureDetector() != null &&
             sb.config.getGestureDetector().onTouchEvent(motionEvent)) {
 
