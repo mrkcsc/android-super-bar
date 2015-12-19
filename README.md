@@ -1,4 +1,4 @@
-### android-super-bar
+### Android-Super-Bar
 
 A full configurable value bar with an optional overlay bar and control widget slider to adjust the value.
 
