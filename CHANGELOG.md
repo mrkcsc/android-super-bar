@@ -1,3 +1,7 @@
+## 1.3.5 - 2015-12-18
+
+- Fixed shadow layer calls being made in edit mode.
+
 ## 1.3.4 - 2015-12-18
 
 - Fixed a recursion bug caused by disabling touch.
