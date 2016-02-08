@@ -48,13 +48,16 @@ class SuperBarPainter extends Paint {
      */
     void setColor(int color, Integer shadowRadius, int shadowColor) {
 
-        if (!view.isInEditMode() && shadowRadius != null) {
+        if (!view.isInEditMode()) {
 
-            setShadowLayer(shadowRadius, 0f, 0f, shadowColor);
+            if (shadowRadius != null) {
 
-        } else {
+                setShadowLayer(shadowRadius, 0f, 0f, shadowColor);
 
-            clearShadowLayer();
+            } else {
+
+                clearShadowLayer();
+            }
         }
 
         super.setColor(color);
