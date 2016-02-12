@@ -39,6 +39,8 @@ compile 'com.miguelgaeta.android-super-bar:super-bar:1.3.5'
     app:sb_barValueMin="0"/>
 ```
 
+![Screenshot](https://raw.githubusercontent.com/mrkcsc/android-super-bar/master/README.screenshot.png)
+
 ### License
 
 *Copyright 2015 Miguel Gaeta*
